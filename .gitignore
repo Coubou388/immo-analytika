@@ -1,0 +1,8 @@
+# Fichiers de travail Claude — exclus du déploiement Netlify
+[C]*
+*.md
+*.ps1
+*.pptx
+*.xlsx
+*.docx
+*.pdf

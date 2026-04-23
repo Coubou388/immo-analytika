@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Review — Immo+ / Afriq'Solus SARL</title>
+<style>
+:root {
+  --primary: #1E3CB4;
+  --primary-dark: #0D1F6B;
+  --primary-mid: #3D5CC8;
+  --primary-light: #E8EDFB;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --danger-border: #FECACA;
+  --warning: #B45309;
+  --warning-light: #FEF3C7;
+  --warning-border: #FDE68A;
+  --success: #047857;
+  --success-light: #D1FAE5;
+  --success-border: #A7F3D0;
+  --neutral: #475569;
+  --bg: #F1F4FB;
+  --card: #FFFFFF;
+  --border: #DDE3EF;
+  --text: #1E293B;
+  --text-light: #64748B;
+  --text-xlight: #94A3B8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.doc-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+  color: white;
+  padding: 36px 48px 32px;
+}
+.doc-header .badge-pill {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.doc-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 6px; }
+.doc-header .subtitle { font-size: 15px; opacity: 0.75; margin-bottom: 20px; }
+.header-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+.header-meta span { font-size: 12px; opacity: 0.8; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+
+/* VERDICT BANNER */
+.verdict-banner {
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 2px solid var(--warning-border);
+  background: var(--warning-light);
+}
+.verdict-icon { font-size: 40px; flex-shrink: 0; }
+.verdict-body { flex: 1; }
+.verdict-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--warning); margin-bottom: 4px; }
+.verdict-title { font-size: 20px; font-weight: 800; color: var(--warning); margin-bottom: 6px; }
+.verdict-desc { font-size: 13px; color: var(--text); }
+.verdict-stats { display: flex; gap: 16px; flex-shrink: 0; }
+.vs { text-align: center; }
+.vs-num { font-size: 28px; font-weight: 800; line-height: 1; }
+.vs-good .vs-num { color: var(--success); }
+.vs-bad .vs-num { color: var(--danger); }
+.vs-label { font-size: 11px; color: var(--text-light); }
+
+/* KPI CARDS */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(30,60,180,0.05);
+}
+.kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 6px; }
+.kpi-value { font-size: 22px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.kpi-sub { font-size: 12px; color: var(--text-light); }
+.kpi-green .kpi-value { color: var(--success); }
+.kpi-red   .kpi-value { color: var(--danger); }
+.kpi-blue  .kpi-value { color: var(--primary); }
+
+/* SECTION */
+.section {
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(30,60,180,0.05);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.section-header {
+  padding: 16px 22px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--primary-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.section-header h2 { font-size: 15px; font-weight: 700; color: var(--primary-dark); flex: 1; }
+.section-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--primary-light); color: var(--primary); }
+.section-body { padding: 18px 22px; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: var(--primary-light); color: var(--primary-dark);
+  font-weight: 700; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.4px; padding: 10px 14px; text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #F8FAFF; }
+tbody td { padding: 10px 14px; vertical-align: middle; line-height: 1.4; }
+
+/* CHECKLIST TABLE ROWS */
+tr.row-ok    td:first-child { border-left: 3px solid var(--success); }
+tr.row-warn  td:first-child { border-left: 3px solid #F59E0B; }
+tr.row-bad   td:first-child { border-left: 3px solid var(--danger); }
+
+/* BADGES */
+.badge { display:inline-block; border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-ok      { background:var(--success-light); color:var(--success); border:1px solid var(--success-border); }
+.badge-warn    { background:var(--warning-light); color:var(--warning); border:1px solid var(--warning-border); }
+.badge-bad     { background:var(--danger-light);  color:var(--danger);  border:1px solid var(--danger-border); }
+.badge-partial { background:#F3E8FF; color:#6D28D9; border:1px solid #DDD6FE; }
+.badge-blue    { background:var(--primary-light); color:var(--primary); border:1px solid #C3CEF0; }
+
+/* CATEGORY HEADERS IN CHECKLIST */
+.cat-header td {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+}
+
+/* HIGHLIGHTS */
+.highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.highlight-card {
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid;
+}
+.highlight-good { background: var(--success-light); border-color: var(--success-border); }
+.highlight-bad  { background: var(--warning-light); border-color: var(--warning-border); }
+.highlight-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.highlight-good h4 { color: var(--success); }
+.highlight-bad  h4 { color: var(--warning); }
+.highlight-card ul { list-style: none; padding: 0; }
+.highlight-card ul li {
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 4px 0 4px 18px;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.highlight-card ul li:last-child { border-bottom: none; }
+.highlight-good ul li::before { content: "✓"; position: absolute; left: 0; color: var(--success); font-weight: 700; }
+.highlight-bad  ul li::before { content: "⚠"; position: absolute; left: 0; color: var(--warning); }
+
+/* NEXT STEPS */
+.next-steps { counter-reset: step; }
+.next-step {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.next-step:last-child { border-bottom: none; }
+.step-circle {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.step-priority-1 .step-circle { background: var(--danger); }
+.step-priority-2 .step-circle { background: var(--danger); }
+.step-priority-3 .step-circle { background: var(--warning); }
+.step-priority-4 .step-circle { background: var(--warning); }
+.step-priority-5 .step-circle { background: var(--success); }
+.step-text { flex: 1; }
+.step-text strong { display: block; font-size: 14px; color: var(--primary-dark); margin-bottom: 3px; }
+.step-text p { font-size: 13px; color: var(--text-light); }
+
+.doc-footer { text-align: center; padding: 24px; color: var(--text-xlight); font-size: 12px; border-top: 1px solid var(--border); margin-top: 8px; }
+
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .highlight-grid { grid-template-columns: 1fr; }
+  .verdict-stats { display: none; }
+  .doc-header { padding: 24px 20px; }
+  .container { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="badge-pill">📋 Due Diligence</div>
+  <h1>Audit Review — Documents Reçus vs Checklist</h1>
+  <div class="subtitle">Afriq'Solus SARL (Immo+) · Revue par Analytika Consulting</div>
+  <div class="header-meta">
+    <span>📅 20 avril 2026</span>&nbsp;&nbsp;
+    <span>🏢 Analytika Consulting</span>&nbsp;&nbsp;
+    <span>📄 6 documents reçus · 20 items checklist</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- VERDICT BANNER -->
+<div class="verdict-banner">
+  <div class="verdict-icon">⏸️</div>
+  <div class="verdict-body">
+    <div class="verdict-label">Verdict provisoire</div>
+    <div class="verdict-title">En attente — Relance nécessaire</div>
+    <div class="verdict-desc">Les documents reçus confirment l'existence légale d'Afriq'Solus SARL, mais les catégories Finance, Produit/Tech et Commercial sont entièrement vides. Impossible de rendre un verdict go/no-go en l'état.</div>
+  </div>
+  <div class="verdict-stats">
+    <div class="vs vs-good">
+      <div class="vs-num">6</div>
+      <div class="vs-label">Items couverts</div>
+    </div>
+    <div class="vs vs-bad">
+      <div class="vs-num">14</div>
+      <div class="vs-label">Items manquants</div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI GRID -->
+<div class="kpi-grid">
+  <div class="kpi-card kpi-green">
+    <div class="kpi-label">Docs valides reçus</div>
+    <div class="kpi-value">4</div>
+    <div class="kpi-sub">IDU, DFE, Agrément, Avis constitution</div>
+  </div>
+  <div class="kpi-card kpi-red">
+    <div class="kpi-label">Docs manquants</div>
+    <div class="kpi-value">14</div>
+    <div class="kpi-sub">Finance, Produit, Commercial</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Doc corrompu</div>
+    <div class="kpi-value" style="color:var(--danger);">1</div>
+    <div class="kpi-sub">RCCM SOLUS 2.pdf — à renvoyer</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Doublons reçus</div>
+    <div class="kpi-value" style="color:var(--warning);">1</div>
+    <div class="kpi-sub">Avis de constitution envoyé 2×</div>
+  </div>
+</div>
+
+<!-- DOCUMENTS REÇUS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">📁</div>
+    <h2>Analyse Document par Document</h2>
+    <span class="section-tag">6 fichiers reçus</span>
+  </div>
+  <div class="section-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Document</th>
+            <th>Ce que c'est</th>
+            <th>Statut</th>
+            <th>Détails clés</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-ok">
+            <td><strong>Certificat IDU (CEPICI)</strong></td>
+            <td>Immatriculation unique</td>
+            <td><span class="badge badge-ok">✅ Valide</span></td>
+            <td>IDU CI-2023-0057027 C · Gérant : Assoko Moune Moïse · Cogérant : Djanman Koffi · Capital 5M FCFA · 28/07/2023</td>
+          </tr>
+          <tr class="row-ok">
+            <td><strong>DFE — Déclaration Fiscale d'Existence</strong></td>
+            <td>Enregistrement fiscal</td>
+            <td><span class="badge badge-ok">✅ Valide</span></td>
+            <td>Activité : prestation services immo + mise en relation · Régime TEE · ITS coché · Signé 02/08/2023</td>
+          </tr>
+          <tr class="row-ok">
+            <td><strong>Arrêté d'agrément N° AB 0010081</strong></td>
+            <td>Autorisation d'exercer comme Agent Immobilier</td>
+            <td><span class="badge badge-ok">✅ Signal fort</span></td>
+            <td>Ministère de la Construction du Logement et de l'Urbanisme · Délivré 11/10/2023 · Nécessite dossier de moralité + enquête ministérielle + avis CAPPI</td>
+          </tr>
+          <tr class="row-ok">
+            <td><strong>Avis de Constitution CEPICI</strong></td>
+            <td>Notice CEPICI de création de société</td>
+            <td><span class="badge badge-ok">✅ Valide</span></td>
+            <td>Capital 5M FCFA · 500 parts à 10k FCFA · Constitution 21/07/2023 · RCCM CI-ABJ-03-2023-B12-04477</td>
+          </tr>
+          <tr class="row-warn">
+            <td><strong>Avis de Constitution (2ème envoi)</strong></td>
+            <td>Notice CEPICI — doublon exact du précédent</td>
+            <td><span class="badge badge-warn">⚠️ Doublon</span></td>
+            <td>Fichier identique au précédent — slot gaspillé dans la transmission</td>
+          </tr>
+          <tr class="row-bad">
+            <td><strong>RCCM SOLUS 2.pdf</strong></td>
+            <td>Registre du Commerce et du Crédit Mobilier</td>
+            <td><span class="badge badge-bad">❌ Corrompu</span></td>
+            <td>Fichier illisible — manque l'en-tête %PDF- · Probablement exporté depuis un scanner ou WhatsApp · À renvoyer impérativement</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST COMPLÈTE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <h2>Revue Checklist Complète — 20 Items</h2>
+    <span class="section-tag">4 catégories</span>
+  </div>
+  <div class="section-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Item checklist</th>
+            <th>Statut</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- LEGAL -->
+          <tr class="cat-header">
+            <td colspan="3">🏛️ A — Legal (6 items)</td>
+          </tr>
+          <tr class="row-warn">
+            <td>Statuts de société (acte de constitution)</td>
+            <td><span class="badge badge-partial">⚠️ Partiel</span></td>
+            <td>L'avis de constitution donne les grandes lignes mais ce ne sont pas les statuts complets signés</td>
+          </tr>
+          <tr class="row-warn">
+            <td>Répartition du cap table (nominatif + %)</td>
+            <td><span class="badge badge-partial">⚠️ Partiel</span></td>
+            <td>Gérant : Assoko Moune Moïse / Cogérant : Djanman Koffi Désiré Virgile. 500 parts à 10k FCFA. Répartition exacte (%) non précisée.</td>
+          </tr>
+          <tr class="row-bad">
+            <td>Pacte d'associés, clauses de vesting/cliff</td>
+            <td><span class="badge badge-bad">❌ Manquant</span></td>
+            <td>Aucun document transmis</td>
+          </tr>
+          <tr class="row-ok">
+            <td>Preuve d'immatriculation RCCM</td>
+            <td><span class="badge badge-partial">⚠️ Partiel</span></td>
+            <td>IDU + Avis de constitution confirment le N° RCCM. Fichier RCCM PDF corrompu — à renvoyer.</td>
+          </tr>
+          <tr class="row-ok">
+            <td>Agrément activité de transaction immobilière</td>
+            <td><span class="badge badge-ok">✅ Fourni</span></td>
+            <td>Arrêté N° AB 0010081 du 11/10/2023 · Signal de légitimité opérationnelle fort</td>
+          </tr>
+          <tr class="row-bad">
+            <td>Contrats-types avec propriétaires</td>
+            <td><span class="badge badge-bad">❌ Manquant</span></td>
+            <td>Aucun transmis</td>
+          </tr>
+          <!-- FINANCE -->
+          <tr class="cat-header">
+            <td colspan="3">💰 B — Finance & Comptabilité (4 items)</td>
+          </tr>
+          <tr class="row-bad">
+            <td>États financiers / relevés de trésorerie</td>
+            <td><span class="badge badge-bad">❌ Manquant</span></td>
+            <td>Rien transmis</td>
+          </tr>
+          <tr class="row-bad">
+            <td>Revenus réels par segment</td>
+            <td><span class="badge badge-bad">❌ Manquant</span></td>
+            <td>Rien transmis</td>
+          </tr>
+          <tr class="row-bad">
+            <td>Structure de coûts mensuelle</td>
+            <td><span class="badge badge-bad">❌ Manquant</span></td>
+            <td>Rien transmis</td>
+          </tr>
+          <tr class="row-bad">
+            <td>Dettes et engagements financiers</td>
+            <td><span class="badge badge-bad">❌ Manquant</span></td>
+            <td>Rien transmis</td>
+          </tr>
+          <!-- PRODUIT -->
+          <tr class="cat-header">
+            <td colspan="3">📱 C — Produit & Tech (7 items)</td>
+          </tr>
+          <tr class="row-bad"><td>Architecture technique de la plateforme</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <tr class="row-bad"><td>Dashboard analytics ou export données</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis — accès limité aux exports/screenshots confirmé</td></tr>
+          <tr class="row-bad"><td>Rétention utilisateurs 30 et 90 jours</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <tr class="row-bad"><td>Funnel acquisition (télécharg. → transaction)</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <tr class="row-bad"><td>Données de transactions complètes</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis — seule la 1ère transaction mentionnée : 75k FCFA, commission 5 200 FCFA</td></tr>
+          <tr class="row-bad"><td>Liste des biens actifs avec statut</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <tr class="row-bad"><td>Logs bugs / tickets UX</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <!-- COMMERCIAL -->
+          <tr class="cat-header">
+            <td colspan="3">📊 D — Commercial & Marché (3 items)</td>
+          </tr>
+          <tr class="row-bad"><td>Pipeline commercial (agents, partenariats)</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <tr class="row-bad"><td>Conversion visite express → location signée</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+          <tr class="row-bad"><td>Business plan / projections existantes</td><td><span class="badge badge-bad">❌ Manquant</span></td><td>Rien transmis</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYSE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <h2>Analyse — Points Positifs & Signaux à Surveiller</h2>
+  </div>
+  <div class="section-body">
+    <div class="highlight-grid">
+      <div class="highlight-card highlight-good">
+        <h4>✅ Points Positifs</h4>
+        <ul>
+          <li><strong>Existence légale solide :</strong> IDU, RCCM, Tribunal du Commerce d'Abidjan — tout est cohérent et correctement daté (juillet–août 2023)</li>
+          <li><strong>Agrément immobilier réel :</strong> Arrêté AB 0010081 est un document sérieux. Implique un dossier de moralité, une enquête ministérielle et un avis favorable de la CAPPI — signal de légitimité fort</li>
+          <li><strong>Gouvernance identifiée :</strong> Deux co-gérants nommément identifiés, capital intégralement libéré à la constitution</li>
+          <li><strong>Activité déclarée fiscalement :</strong> DFE signée en août 2023, régime TEE, ITS coché — cohérent avec une activité de prestation de services</li>
+        </ul>
+      </div>
+      <div class="highlight-card highlight-bad">
+        <h4>⚠️ Signaux à Surveiller</h4>
+        <ul>
+          <li><strong>Capital de 5M FCFA (~7 600€) :</strong> Très faible, typique d'une micro-SARL ivoirienne. Ne dit rien sur la santé financière mais à noter</li>
+          <li><strong>Société créée en juillet 2023 :</strong> ~2,5 ans d'existence. Peu de recul pour évaluer la trajectoire</li>
+          <li><strong>Nom légal ≠ Nom produit :</strong> L'entité juridique est Afriq'Solus SARL, pas Immo+. Implication pour tout accord futur : les contrats seront avec Afriq'Solus SARL</li>
+          <li><strong>Zéro donnée business :</strong> 14/20 items du checklist entièrement vides — et ce sont les plus importants pour évaluer la viabilité commerciale</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCHAINES ÉTAPES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🚀</div>
+    <h2>Prochaines Étapes — Top 5 Priorités de Relance</h2>
+    <span class="section-tag">Action requise</span>
+  </div>
+  <div class="section-body">
+    <div class="next-steps">
+      <div class="next-step step-priority-1">
+        <div class="step-circle">1</div>
+        <div class="step-text">
+          <strong>États financiers ou relevés bancaires depuis le lancement</strong>
+          <p>Bloquant absolu pour la décision go/no-go. Même une estimation ou un tableau simplifié suffit pour commencer.</p>
+        </div>
+      </div>
+      <div class="next-step step-priority-2">
+        <div class="step-circle">2</div>
+        <div class="step-text">
+          <strong>Revenus réels par segment</strong>
+          <p>Courte durée / longue durée / vente / meubles — même sous forme de tableau simple manuscrit.</p>
+        </div>
+      </div>
+      <div class="next-step step-priority-3">
+        <div class="step-circle">3</div>
+        <div class="step-text">
+          <strong>Statuts complets signés</strong>
+          <p>L'avis de constitution n'est pas suffisant — les statuts signés par les associés sont nécessaires pour le cadre juridique de tout accord.</p>
+        </div>
+      </div>
+      <div class="next-step step-priority-4">
+        <div class="step-circle">4</div>
+        <div class="step-text">
+          <strong>Répartition exacte du capital entre associés (%)</strong>
+          <p>On connaît Moïse + associé = 60% mais pas la répartition complète. Nécessaire avant tout accord.</p>
+        </div>
+      </div>
+      <div class="next-step step-priority-5">
+        <div class="step-circle">5</div>
+        <div class="step-text">
+          <strong>Données de base produit</strong>
+          <p>Nombre de biens actifs, utilisateurs actifs 30 jours, transactions complètes réalisées — même exportées en screenshot depuis le dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="doc-footer">
+  Produit par <strong>Analytika Consulting</strong> · Usage interne · Date de revue : 20 avril 2026 · Statut : Revue partielle — documents insuffisants pour décision go/no-go
+</div>
+
+</div>
+</body>
+</html>

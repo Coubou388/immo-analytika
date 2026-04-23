@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questions Stratégiques — Immo+</title>
+<style>
+:root {
+  --primary: #1E3CB4;
+  --primary-dark: #0D1F6B;
+  --primary-mid: #3D5CC8;
+  --primary-light: #E8EDFB;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --danger-border: #FECACA;
+  --warning: #B45309;
+  --warning-light: #FEF3C7;
+  --warning-border: #FDE68A;
+  --success: #047857;
+  --success-light: #D1FAE5;
+  --success-border: #A7F3D0;
+  --bg: #F1F4FB;
+  --card: #FFFFFF;
+  --border: #DDE3EF;
+  --text: #1E293B;
+  --text-light: #64748B;
+  --text-xlight: #94A3B8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.doc-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+  color: white;
+  padding: 36px 48px 32px;
+}
+.doc-header .badge-pill {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.doc-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 6px; }
+.doc-header .subtitle { font-size: 15px; opacity: 0.75; margin-bottom: 20px; }
+.header-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+.header-meta span { font-size: 12px; opacity: 0.8; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+
+/* PRIORITY ORDER */
+.priority-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 1px 4px rgba(30,60,180,0.05);
+}
+.priority-box h3 { font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+.priority-steps { display: flex; gap: 0; align-items: stretch; }
+.priority-step {
+  flex: 1;
+  padding: 12px 16px;
+  border-right: 2px solid var(--border);
+  position: relative;
+}
+.priority-step:last-child { border-right: none; }
+.step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 8px;
+}
+.step-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 4px; }
+.step-sub { font-size: 12px; color: var(--text-light); }
+.step-1 .step-num { background: var(--danger); }
+.step-2 .step-num { background: var(--danger); }
+.step-3 .step-num { background: var(--warning); }
+.step-4 .step-num { background: var(--warning); }
+.step-5 .step-num { background: var(--success); }
+
+/* BLOC SECTION */
+.bloc {
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(30,60,180,0.05);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.bloc-header {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bloc-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.bloc-header-text { flex: 1; }
+.bloc-header-text h2 { font-size: 15px; font-weight: 700; }
+.bloc-header-text p { font-size: 12px; margin-top: 2px; }
+.bloc-badge {
+  font-size: 11px; font-weight: 700; padding: 4px 12px;
+  border-radius: 20px; white-space: nowrap;
+}
+
+.bloc-a .bloc-icon { background: #FEE2E2; }
+.bloc-a .bloc-header { border-left: 4px solid var(--danger); }
+.bloc-a .bloc-header-text h2 { color: var(--danger); }
+.bloc-a .bloc-header-text p { color: #EF4444; opacity: 0.7; }
+.bloc-a .bloc-badge { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-border); }
+
+.bloc-b .bloc-icon { background: var(--warning-light); }
+.bloc-b .bloc-header { border-left: 4px solid #F59E0B; }
+.bloc-b .bloc-header-text h2 { color: var(--warning); }
+.bloc-b .bloc-header-text p { color: var(--warning); opacity: 0.7; }
+.bloc-b .bloc-badge { background: var(--warning-light); color: var(--warning); border: 1px solid var(--warning-border); }
+
+.bloc-c .bloc-icon { background: var(--primary-light); }
+.bloc-c .bloc-header { border-left: 4px solid var(--primary); }
+.bloc-c .bloc-header-text h2 { color: var(--primary); }
+.bloc-c .bloc-header-text p { color: var(--primary); opacity: 0.7; }
+.bloc-c .bloc-badge { background: var(--primary-light); color: var(--primary); border: 1px solid #C3CEF0; }
+
+.bloc-d .bloc-icon { background: #F3E8FF; }
+.bloc-d .bloc-header { border-left: 4px solid #7C3AED; }
+.bloc-d .bloc-header-text h2 { color: #6D28D9; }
+.bloc-d .bloc-header-text p { color: #7C3AED; opacity: 0.7; }
+.bloc-d .bloc-badge { background: #F3E8FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+
+.bloc-e .bloc-icon { background: var(--success-light); }
+.bloc-e .bloc-header { border-left: 4px solid var(--success); }
+.bloc-e .bloc-header-text h2 { color: var(--success); }
+.bloc-e .bloc-header-text p { color: var(--success); opacity: 0.7; }
+.bloc-e .bloc-badge { background: var(--success-light); color: var(--success); border: 1px solid var(--success-border); }
+
+/* QUESTIONS */
+.questions-list { padding: 8px 0; }
+.question-item {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.question-item:last-child { border-bottom: none; }
+.q-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.bloc-a .q-num { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-border); }
+.bloc-b .q-num { background: var(--warning-light); color: var(--warning); border: 1px solid var(--warning-border); }
+.bloc-c .q-num { background: var(--primary-light); color: var(--primary); border: 1px solid #C3CEF0; }
+.bloc-d .q-num { background: #F3E8FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+.bloc-e .q-num { background: var(--success-light); color: var(--success); border: 1px solid var(--success-border); }
+
+.q-content { flex: 1; }
+.q-text { font-size: 14px; color: var(--text); line-height: 1.55; }
+.q-note { font-size: 12px; color: var(--text-light); margin-top: 4px; font-style: italic; }
+
+/* HYPOTHÈSES TABLE */
+.section {
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(30,60,180,0.05);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.section-header {
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--primary-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.section-header h2 { font-size: 15px; font-weight: 700; color: var(--primary-dark); flex: 1; }
+.section-body { padding: 20px 24px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: var(--primary-light); color: var(--primary-dark);
+  font-weight: 700; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.4px; padding: 10px 14px; text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #F8FAFF; }
+tbody td { padding: 10px 14px; vertical-align: top; line-height: 1.5; }
+
+.badge { display:inline-block; border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-danger  { background:var(--danger-light);  color:var(--danger);  border:1px solid var(--danger-border); }
+.badge-warning { background:var(--warning-light); color:var(--warning); border:1px solid var(--warning-border); }
+.badge-success { background:var(--success-light); color:var(--success); border:1px solid var(--success-border); }
+.badge-neutral { background:#F1F5F9; color:#475569; border:1px solid #CBD5E1; }
+.badge-blue    { background:var(--primary-light); color:var(--primary); border:1px solid #C3CEF0; }
+
+.doc-footer { text-align: center; padding: 24px; color: var(--text-xlight); font-size: 12px; border-top: 1px solid var(--border); margin-top: 8px; }
+
+@media (max-width: 768px) {
+  .priority-steps { flex-direction: column; }
+  .priority-step { border-right: none; border-bottom: 2px solid var(--border); }
+  .priority-step:last-child { border-bottom: none; }
+  .doc-header { padding: 24px 20px; }
+  .container { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="badge-pill">❓ Questions Stratégiques</div>
+  <h1>Questions Stratégiques pour Immo+</h1>
+  <div class="subtitle">À poser à Moïse pour valider les hypothèses et affiner la veille</div>
+  <div class="header-meta">
+    <span>📅 20 avril 2026</span>&nbsp;&nbsp;
+    <span>🏢 Analytika Consulting</span>&nbsp;&nbsp;
+    <span>🎯 35 questions · 5 blocs thématiques</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ORDRE DE PRIORITÉ -->
+<div class="priority-box">
+  <h3>🎯 Ordre de priorité recommandé pour le prochain échange avec Moïse</h3>
+  <div class="priority-steps">
+    <div class="priority-step step-1">
+      <div class="step-num">1</div>
+      <div class="step-title">Bloc A — Finances</div>
+      <div class="step-sub">Bloque la décision go/no-go</div>
+    </div>
+    <div class="priority-step step-2">
+      <div class="step-num">2</div>
+      <div class="step-title">Bloc B1–B4 — Produit</div>
+      <div class="step-sub">Santé du produit</div>
+    </div>
+    <div class="priority-step step-3">
+      <div class="step-num">3</div>
+      <div class="step-title">Bloc C1–C4 — Concurrence</div>
+      <div class="step-sub">Positionnement marché</div>
+    </div>
+    <div class="priority-step step-4">
+      <div class="step-num">4</div>
+      <div class="step-title">Bloc D1–D3 — Gouvernance</div>
+      <div class="step-sub">Avant tout accord</div>
+    </div>
+    <div class="priority-step step-5">
+      <div class="step-num">5</div>
+      <div class="step-title">Bloc E2 & E5 — Vision</div>
+      <div class="step-sub">Ouverture/clôture réunion</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOC A — FINANCES -->
+<div class="bloc bloc-a">
+  <div class="bloc-header">
+    <div class="bloc-icon">💰</div>
+    <div class="bloc-header-text">
+      <h2>Bloc A — Modèle Économique & Finances</h2>
+      <p>Ces questions bloquent la décision go/no-go — priorité absolue</p>
+    </div>
+    <span class="bloc-badge">🔴 Priorité #1</span>
+  </div>
+  <div class="questions-list">
+    <div class="question-item">
+      <div class="q-num">A1</div>
+      <div class="q-content">
+        <div class="q-text">Quel est le revenu total généré par Immo+ depuis le lancement (toutes sources confondues) ? Même une estimation rough suffit pour commencer.</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">A2</div>
+      <div class="q-content">
+        <div class="q-text">Quelle est la répartition du chiffre d'affaires par segment : courte durée / longue durée / vente / meubles ? Quel segment génère le plus ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">A3</div>
+      <div class="q-content">
+        <div class="q-text">La commission de 7% est-elle effectivement prélevée sur toutes les transactions actuelles, ou seulement sur certaines ? Comment est-elle collectée (Mobile Money, virement, espèces) ?</div>
+        <div class="q-note">→ Valide l'hypothèse de revenus modélisée par Analytika</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">A4</div>
+      <div class="q-content">
+        <div class="q-text">Quelles sont les dépenses mensuelles de la structure (salaires, hébergement serveurs, marketing, développement) ? Y a-t-il des dettes ou engagements financiers en cours ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">A5</div>
+      <div class="q-content">
+        <div class="q-text">Avez-vous des états financiers ou des relevés bancaires depuis le lancement, même partiels ? Si non, quel est l'horizon pour les avoir ?</div>
+        <div class="q-note">→ Conditions préalables à la décision go/no-go formelle</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOC B — PRODUIT -->
+<div class="bloc bloc-b">
+  <div class="bloc-header">
+    <div class="bloc-icon">📱</div>
+    <div class="bloc-header-text">
+      <h2>Bloc B — Produit & Traction</h2>
+      <p>Ces données conditionnent l'évaluation de la santé réelle du produit</p>
+    </div>
+    <span class="bloc-badge">🟡 Priorité #2</span>
+  </div>
+  <div class="questions-list">
+    <div class="question-item">
+      <div class="q-num">B1</div>
+      <div class="q-content">
+        <div class="q-text">Parmi les 3 800–3 900 utilisateurs inscrits, quel est le nombre d'utilisateurs actifs sur les 30 derniers jours ? Et sur les 90 derniers jours ?</div>
+        <div class="q-note">→ Distingue les inscrits des utilisateurs réellement engagés</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">B2</div>
+      <div class="q-content">
+        <div class="q-text">Combien de transactions complètes (pas juste des listings — de vraies transactions finalisées avec paiement) ont été réalisées à ce jour sur la plateforme ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">B3</div>
+      <div class="q-content">
+        <div class="q-text">Sur les 2 000 biens listés, combien sont actuellement "actifs" (disponibles, mis à jour récemment) vs "dormants" (non mis à jour depuis plus de 30 jours) ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">B4</div>
+      <div class="q-content">
+        <div class="q-text">Quel est le segment qui convertit le mieux (listing → transaction) : courte durée, longue durée, vente ou meubles ?</div>
+        <div class="q-note">→ Détermine où concentrer les efforts d'activation</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">B5</div>
+      <div class="q-content">
+        <div class="q-text">Y a-t-il des données de rétention ? Est-ce que les utilisateurs qui ont réalisé une première transaction reviennent en faire d'autres ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">B6</div>
+      <div class="q-content">
+        <div class="q-text">Quels sont les principaux retours négatifs ou bugs remontés par les utilisateurs ? Quels sont les points de friction dans l'expérience actuelle ?</div>
+        <div class="q-note">→ Oriente les recommandations UX d'Analytika</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOC C — CONCURRENCE -->
+<div class="bloc bloc-c">
+  <div class="bloc-header">
+    <div class="bloc-icon">🔍</div>
+    <div class="bloc-header-text">
+      <h2>Bloc C — Positionnement Concurrentiel</h2>
+      <p>Pour affiner la veille et calibrer les recommandations</p>
+    </div>
+    <span class="bloc-badge">🟡 Priorité #3</span>
+  </div>
+  <div class="questions-list">
+    <div class="question-item">
+      <div class="q-num">C1</div>
+      <div class="q-content">
+        <div class="q-text">Est-ce que Moïse et son équipe connaissent Babimo ? Ont-ils une analyse de ce concurrent ? Comment Immo+ se différencie-t-il explicitement de Babimo dans leur discours commercial ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">C2</div>
+      <div class="q-content">
+        <div class="q-text">Comment Moïse réagit-il face à Tylimmo ? Est-ce vu comme une menace directe, un concurrent sur un segment différent, ou pas encore sur le radar ?</div>
+        <div class="q-note">→ Évalue la conscience stratégique de l'équipe Immo+</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">C3</div>
+      <div class="q-content">
+        <div class="q-text">Immo+ a-t-il déjà perdu des utilisateurs ou des transactions au profit d'un concurrent identifié ? Si oui, lequel ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">C4</div>
+      <div class="q-content">
+        <div class="q-text">L'intégration Mobile Money (Wave, Orange Money) est-elle une feature déjà active dans l'app, ou en cours de développement ? Si active, quel % des transactions passe par ce canal ?</div>
+        <div class="q-note">→ Valide le différenciateur clé identifié par Analytika</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">C5</div>
+      <div class="q-content">
+        <div class="q-text">Airbnb est-il perçu comme un concurrent ou comme un modèle d'inspiration ? Y a-t-il eu des discussions avec des propriétaires Airbnb pour les onboarder sur Immo+ ?</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOC D — GOUVERNANCE -->
+<div class="bloc bloc-d">
+  <div class="bloc-header">
+    <div class="bloc-icon">⚖️</div>
+    <div class="bloc-header-text">
+      <h2>Bloc D — Gouvernance & Cap Table</h2>
+      <p>Pour sécuriser le cadre contractuel avant tout accord</p>
+    </div>
+    <span class="bloc-badge">Priorité #4</span>
+  </div>
+  <div class="questions-list">
+    <div class="question-item">
+      <div class="q-num">D1</div>
+      <div class="q-content">
+        <div class="q-text">La répartition exacte du capital entre les 6 actionnaires est-elle documentée ? Pouvez-vous partager un tableau de cap (même simplifié) avec les pourcentages exacts ?</div>
+        <div class="q-note">→ On sait que Moïse + associé = 60% mais les % précis sont inconnus</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">D2</div>
+      <div class="q-content">
+        <div class="q-text">Y a-t-il un pacte d'associés en place ? Si oui, y a-t-il des clauses de drag-along, tag-along ou de préemption qui affecteraient un éventuel accord de partenariat avec Analytika ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">D3</div>
+      <div class="q-content">
+        <div class="q-text">Qui prend les décisions opérationnelles au quotidien — Moïse seul, ou en consultation avec le cogérant Djanman Koffi Désiré Virgile ? Comment ce dernier est-il impliqué dans le projet Immo+ ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">D4</div>
+      <div class="q-content">
+        <div class="q-text">Y a-t-il d'autres discussions en cours avec des partenaires, investisseurs ou consultants ? (Important pour calibrer le niveau d'urgence et l'exclusivité potentielle de l'accord avec Analytika.)</div>
+        <div class="q-note">→ Actuellement inconnu — risque de concurrence sur l'accord Analytika</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOC E — VISION -->
+<div class="bloc bloc-e">
+  <div class="bloc-header">
+    <div class="bloc-icon">🚀</div>
+    <div class="bloc-header-text">
+      <h2>Bloc E — Vision & Ambition</h2>
+      <p>Pour aligner les recommandations sur les objectifs réels de Moïse</p>
+    </div>
+    <span class="bloc-badge">🟢 Priorité #5</span>
+  </div>
+  <div class="questions-list">
+    <div class="question-item">
+      <div class="q-num">E1</div>
+      <div class="q-content">
+        <div class="q-text">Quelle est la vision à 3 ans pour Immo+ ? L'objectif est-il de devenir le leader CI, de s'étendre régionalement, ou de préparer une cession/levée de fonds ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">E2</div>
+      <div class="q-content">
+        <div class="q-text">Pourquoi le recours à Analytika maintenant ? Qu'est-ce que Moïse n'arrive pas à résoudre seul qui a motivé cette démarche ?</div>
+        <div class="q-note">→ À poser tôt pour comprendre le vrai besoin et éviter tout malentendu sur le périmètre</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">E3</div>
+      <div class="q-content">
+        <div class="q-text">Est-ce que l'équipe tech des 7 développeurs (CI, France, Chine) est interne (salariés/associés) ou externe (prestataires) ? Quelle est la situation contractuelle avec eux ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">E4</div>
+      <div class="q-content">
+        <div class="q-text">Y a-t-il des discussions avec des fonds d'investissement ou structures de financement (Wave Ventures, Orange Ventures, Orange Fab, etc.) ? Si oui, à quel stade ?</div>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="q-num">E5</div>
+      <div class="q-content">
+        <div class="q-text">Comment Moïse définit-il le succès du partenariat avec Analytika dans 12 mois ? Quel serait le résultat qui lui permettrait de dire "c'était la bonne décision" ?</div>
+        <div class="q-note">→ Question de clôture idéale pour aligner les attentes dès le départ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HYPOTHÈSES NON VALIDÉES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">⚠️</div>
+    <h2>Hypothèses Actuellement Non Validées</h2>
+  </div>
+  <div class="section-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Hypothèse</th>
+            <th>Source</th>
+            <th>Statut</th>
+            <th>Question de validation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Commission réelle = 7% sur toutes les transactions</td>
+            <td>Call Zoom (Moïse)</td>
+            <td><span class="badge badge-warning">⚠️ Partiel</span></td>
+            <td><strong>A3</strong></td>
+          </tr>
+          <tr>
+            <td>3 800 utilisateurs "actifs" (vs juste inscrits)</td>
+            <td>Call Zoom (Moïse)</td>
+            <td><span class="badge badge-warning">⚠️ À confirmer</span></td>
+            <td><strong>B1</strong></td>
+          </tr>
+          <tr>
+            <td>Mobile Money intégré et fonctionnel dans l'app</td>
+            <td>Présentation + call</td>
+            <td><span class="badge badge-warning">⚠️ À confirmer</span></td>
+            <td><strong>C4</strong></td>
+          </tr>
+          <tr>
+            <td>Moïse = décisionnaire principal</td>
+            <td>Documents légaux</td>
+            <td><span class="badge badge-success">✅ Probable</span></td>
+            <td><strong>D3</strong></td>
+          </tr>
+          <tr>
+            <td>Aucune discussion en cours avec d'autres partenaires</td>
+            <td>Non mentionné</td>
+            <td><span class="badge badge-danger">❓ Inconnu</span></td>
+            <td><strong>D4</strong></td>
+          </tr>
+          <tr>
+            <td>Répartition cap : Moïse + associé = 60%</td>
+            <td>Call Zoom</td>
+            <td><span class="badge badge-warning">⚠️ % exacts inconnus</span></td>
+            <td><strong>D1</strong></td>
+          </tr>
+          <tr>
+            <td>Segment courte durée = premier levier de revenus</td>
+            <td>Analyse Analytika</td>
+            <td><span class="badge badge-danger">❓ Hypothèse à valider</span></td>
+            <td><strong>B4</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="doc-footer">
+  Produit par <strong>Analytika Consulting</strong> · Usage interne · Dernière mise à jour : 20 avril 2026
+</div>
+
+</div>
+</body>
+</html>

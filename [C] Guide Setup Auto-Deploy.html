@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide Setup Auto-Deploy — Immo+</title>
+<style>
+:root {
+  --primary: #1E3CB4;
+  --primary-dark: #0D1F6B;
+  --primary-mid: #3D5CC8;
+  --primary-light: #E8EDFB;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --warning: #B45309;
+  --warning-light: #FEF3C7;
+  --success: #047857;
+  --success-light: #D1FAE5;
+  --success-border: #A7F3D0;
+  --bg: #F1F4FB;
+  --card: #FFFFFF;
+  --border: #DDE3EF;
+  --text: #1E293B;
+  --text-light: #64748B;
+  --code-bg: #1E293B;
+  --code-text: #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.doc-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+  color: white;
+  padding: 36px 48px 32px;
+}
+.doc-header .badge { display:inline-block; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); border-radius:20px; padding:3px 12px; font-size:11px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:12px; }
+.doc-header h1 { font-size:26px; font-weight:700; margin-bottom:6px; }
+.doc-header .subtitle { font-size:15px; opacity:0.75; margin-bottom:20px; }
+.header-meta { display:flex; gap:20px; flex-wrap:wrap; }
+.header-meta span { font-size:12px; opacity:0.8; background:rgba(255,255,255,0.1); padding:4px 14px; border-radius:20px; border:1px solid rgba(255,255,255,0.2); }
+
+.container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+
+/* PIPELINE VISUAL */
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.pipe-step {
+  text-align: center;
+  padding: 0 16px;
+}
+.pipe-icon { font-size: 28px; margin-bottom: 6px; }
+.pipe-label { font-size: 12px; font-weight: 700; color: var(--primary-dark); }
+.pipe-sub { font-size: 11px; color: var(--text-light); }
+.pipe-arrow { font-size: 20px; color: var(--border); padding: 0 4px; flex-shrink: 0; }
+
+/* STEP CARD */
+.step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(30,60,180,0.05);
+}
+.step-header {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FAFBFF;
+}
+.step-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.step-header-text { flex: 1; }
+.step-header-text h3 { font-size: 15px; font-weight: 700; color: var(--primary-dark); }
+.step-header-text p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.step-badge { font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; white-space: nowrap; }
+.badge-once { background: var(--success-light); color: var(--success); border: 1px solid var(--success-border); }
+.badge-important { background: var(--warning-light); color: var(--warning); border: 1px solid #FDE68A; }
+
+.step-body { padding: 18px 22px; }
+
+/* SUBSTEPS */
+.substep {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.substep:last-child { border-bottom: none; }
+.substep-bullet {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.substep-content { flex: 1; }
+.substep-content p { font-size: 13px; color: var(--text); line-height: 1.55; }
+.substep-content .note { font-size: 12px; color: var(--text-light); margin-top: 4px; font-style: italic; }
+
+/* CODE BLOCK */
+.code-block {
+  background: var(--code-bg);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--code-text);
+  overflow-x: auto;
+  position: relative;
+}
+.code-block .cmd { color: #93C5FD; }
+.code-block .comment { color: #64748B; font-style: italic; }
+.code-block .value { color: #86EFAC; }
+.code-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-light); margin-bottom: 6px; }
+
+/* ALERT */
+.alert { border-radius: 10px; padding: 14px 18px; margin: 12px 0; display: flex; gap: 10px; }
+.alert-icon { font-size: 18px; flex-shrink: 0; }
+.alert-content p { font-size: 13px; line-height: 1.5; }
+.alert-content strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.alert-info { background: var(--primary-light); border: 1px solid #C3CEF0; }
+.alert-info strong { color: var(--primary); }
+.alert-warn { background: var(--warning-light); border: 1px solid #FDE68A; }
+.alert-warn strong { color: var(--warning); }
+.alert-success { background: var(--success-light); border: 1px solid var(--success-border); }
+.alert-success strong { color: var(--success); }
+
+/* PATH BOX */
+.path-box {
+  background: #F8FAFF;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 10px 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+/* RESULT BOX */
+.result-box {
+  background: var(--success-light);
+  border: 1px solid var(--success-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  text-align: center;
+  margin-top: 28px;
+}
+.result-box .result-icon { font-size: 36px; margin-bottom: 8px; }
+.result-box h3 { font-size: 16px; font-weight: 700; color: var(--success); margin-bottom: 6px; }
+.result-box p { font-size: 13px; color: var(--text); }
+
+.divider { height: 1px; background: var(--border); margin: 8px 0; }
+.doc-footer { text-align:center; padding:24px; color:#94A3B8; font-size:12px; border-top:1px solid var(--border); margin-top:8px; }
+
+@media (max-width: 680px) {
+  .pipeline { flex-direction: column; }
+  .pipe-arrow { transform: rotate(90deg); }
+  .doc-header { padding: 24px 20px; }
+  .container { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="badge">⚙️ Guide Setup</div>
+  <h1>Auto-Deploy — Guide de Configuration</h1>
+  <div class="subtitle">Windows 11 · Git + GitHub + Netlify · Mise en ligne automatique à chaque update Claude</div>
+  <div class="header-meta">
+    <span>🖥️ Windows 11</span>
+    <span>⏱️ Setup ~15 min</span>
+    <span>🔄 Déploiement automatique ensuite</span>
+    <span>🆓 100% Gratuit</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PIPELINE -->
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="pipe-icon">🤖</div>
+      <div class="pipe-label">Claude</div>
+      <div class="pipe-sub">modifie un .html</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon">👁️</div>
+      <div class="pipe-label">PowerShell</div>
+      <div class="pipe-sub">détecte le changement</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon">📦</div>
+      <div class="pipe-label">Git</div>
+      <div class="pipe-sub">commit + push auto</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon">🐱</div>
+      <div class="pipe-label">GitHub</div>
+      <div class="pipe-sub">reçoit les fichiers</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon">🌐</div>
+      <div class="pipe-label">Netlify</div>
+      <div class="pipe-sub">redéploie (~1 min)</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon">✅</div>
+      <div class="pipe-label">En ligne</div>
+      <div class="pipe-sub">collègues voient la MAJ</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 1 : GIT -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-header-text">
+        <h3>Installer Git pour Windows</h3>
+        <p>Le seul logiciel à installer — rapide et gratuit</p>
+      </div>
+      <span class="step-badge badge-once">Une seule fois</span>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <div class="substep-bullet">a</div>
+        <div class="substep-content">
+          <p>Va sur <strong>git-scm.com/download/win</strong> et télécharge "64-bit Git for Windows Setup".</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">b</div>
+        <div class="substep-content">
+          <p>Lance l'installeur. Garde toutes les options par défaut et clique "Next" jusqu'à la fin. Clique "Install".</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">c</div>
+        <div class="substep-content">
+          <p>Vérifie l'installation : ouvre <strong>PowerShell</strong> (touche Windows → tape "powershell" → Entrée) et tape :</p>
+          <div class="code-label">PowerShell</div>
+          <div class="code-block"><span class="cmd">git --version</span></div>
+          <div class="note">✓ Si tu vois "git version 2.x.x", c'est bon.</div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">d</div>
+        <div class="substep-content">
+          <p>Configure ton identité Git (remplace avec ton vrai nom et email GitHub) :</p>
+          <div class="code-block">
+            <span class="cmd">git config --global user.name </span><span class="value">"Coubou"</span><br>
+            <span class="cmd">git config --global user.email </span><span class="value">"COUBOUDIABAGATE@gmail.com"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 : GITHUB REPO -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-header-text">
+        <h3>Créer le repo GitHub et y uploader les fichiers</h3>
+        <p>Le repo sera la source de vérité — Netlify le lit automatiquement</p>
+      </div>
+      <span class="step-badge badge-once">Une seule fois</span>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <div class="substep-bullet">a</div>
+        <div class="substep-content">
+          <p>Va sur <strong>github.com/new</strong>. Crée un repo avec ces paramètres :</p>
+          <div class="path-box">
+            Nom : immo-analytika<br>
+            Visibilité : Public ✓<br>
+            ☑ Add a README file
+          </div>
+          <p>Clique "Create repository".</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">b</div>
+        <div class="substep-content">
+          <p>Note l'URL de ton repo — elle ressemble à :</p>
+          <div class="path-box">https://github.com/TON-USERNAME/immo-analytika</div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">c</div>
+        <div class="substep-content">
+          <p>Ouvre PowerShell. Trouve d'abord le chemin Windows exact de ton dossier Engagement. Dans l'Explorateur Windows, navigue vers :</p>
+          <div class="path-box">Immo+ 2025 → 02 Projects → Immo+ Engagement</div>
+          <p>Clique sur la barre d'adresse en haut → copie le chemin complet qui apparaît.</p>
+          <div class="note">Exemple : C:\Users\Coubou\Documents\Immo+ 2025\02 Projects\Immo+ Engagement</div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">d</div>
+        <div class="substep-content">
+          <p>Dans PowerShell, initialise git dans ce dossier (remplace le chemin) :</p>
+          <div class="code-block">
+            <span class="cmd">cd </span><span class="value">"C:\Users\Coubou\Documents\Immo+ 2025\02 Projects\Immo+ Engagement"</span><br>
+            <span class="cmd">git init</span><br>
+            <span class="cmd">git add </span><span class="value">*.html</span><br>
+            <span class="cmd">git commit -m </span><span class="value">"Initial deploy — rapports Immo+"</span><br>
+            <span class="cmd">git branch -M main</span><br>
+            <span class="cmd">git remote add origin </span><span class="value">https://github.com/TON-USERNAME/immo-analytika.git</span><br>
+            <span class="cmd">git push -u origin main</span>
+          </div>
+          <div class="note">⚠️ Git va te demander de te connecter à GitHub. Une fenêtre de navigateur s'ouvrira — connecte-toi avec ton compte GitHub. C'est uniquement la première fois.</div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">e</div>
+        <div class="substep-content">
+          <p>Vérifie sur github.com/TON-USERNAME/immo-analytika que tes fichiers HTML sont bien là.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 : NETLIFY -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-header-text">
+        <h3>Connecter Netlify à GitHub</h3>
+        <p>Netlify redéploie automatiquement à chaque push GitHub</p>
+      </div>
+      <span class="step-badge badge-once">Une seule fois</span>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <div class="substep-bullet">a</div>
+        <div class="substep-content">
+          <p>Va sur <strong>netlify.com</strong> → "Sign up" → connecte-toi avec ton compte GitHub. C'est gratuit.</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">b</div>
+        <div class="substep-content">
+          <p>Dans le dashboard Netlify, clique <strong>"Add new site" → "Import an existing project"</strong>.</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">c</div>
+        <div class="substep-content">
+          <p>Choisis <strong>GitHub</strong> → autorise Netlify → sélectionne le repo <strong>immo-analytika</strong>.</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">d</div>
+        <div class="substep-content">
+          <p>Sur la page de configuration, laisse tout par défaut et clique <strong>"Deploy site"</strong>. Netlify déploie en 1–2 minutes.</p>
+          <div class="alert alert-info">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+              <strong>Optionnel : personnalise l'URL</strong>
+              <p>Dans Site settings → General → Site name, tu peux changer le nom aléatoire en quelque chose comme <strong>immo-analytika</strong> pour avoir l'URL <strong>immo-analytika.netlify.app</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">e</div>
+        <div class="substep-content">
+          <p>Note ton URL Netlify finale — tu en auras besoin pour configurer le script PowerShell à l'étape suivante.</p>
+          <div class="path-box">https://immo-analytika.netlify.app</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 : POWERSHELL SCRIPT -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-header-text">
+        <h3>Configurer le script PowerShell Auto-Deploy</h3>
+        <p>Le script est déjà créé par Claude — juste 2 lignes à modifier</p>
+      </div>
+      <span class="step-badge badge-important">⚠️ Requis</span>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <div class="substep-bullet">a</div>
+        <div class="substep-content">
+          <p>Dans ton dossier <strong>Immo+ Engagement</strong>, trouve le fichier <strong>[C] Auto-Deploy — Watcher.ps1</strong>. Fais un clic droit → <strong>"Modifier avec le Bloc-notes"</strong>.</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">b</div>
+        <div class="substep-content">
+          <p>Remplace les deux lignes suivantes avec tes vraies valeurs :</p>
+          <div class="code-block">
+            <span class="comment"># Ligne 16 — remplace CHEMIN_DU_REPO par ton vrai chemin</span><br>
+            $repoPath = <span class="value">"C:\Users\Coubou\Documents\Immo+ 2025\02 Projects\Immo+ Engagement"</span><br><br>
+            <span class="comment"># Ligne 17 — remplace par ton URL Netlify</span><br>
+            $netlifyUrl = <span class="value">"immo-analytika.netlify.app"</span>
+          </div>
+          <p>Sauvegarde avec Ctrl+S et ferme le Bloc-notes.</p>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">c</div>
+        <div class="substep-content">
+          <p>Autorise PowerShell à exécuter des scripts locaux (une seule fois) :</p>
+          <div class="code-block">
+            <span class="comment"># Lance PowerShell en tant qu'Administrateur, puis tape :</span><br>
+            <span class="cmd">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</span><br>
+            <span class="comment"># Tape Y et Entrée pour confirmer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 : LANCER LE WATCHER -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-header-text">
+        <h3>Lancer le Watcher — pipeline actif</h3>
+        <p>À faire au début de chaque session de travail avec Claude</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <div class="substep-bullet">a</div>
+        <div class="substep-content">
+          <p>Ouvre PowerShell. Navigue vers ton dossier et lance le script :</p>
+          <div class="code-block">
+            <span class="cmd">cd </span><span class="value">"C:\Users\Coubou\...\Immo+ Engagement"</span><br>
+            <span class="cmd">.\[C] Auto-Deploy — Watcher.ps1</span>
+          </div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">b</div>
+        <div class="substep-content">
+          <p>Tu verras ce message confirmant que le watcher est actif :</p>
+          <div class="code-block">
+            <span class="value">================================================</span><br>
+            <span class="value">   Immo+ Auto-Deploy Watcher — ACTIF</span><br>
+            <span class="value">================================================</span><br>
+            <span class="comment">  Dossier surveille : C:\...\Immo+ Engagement</span><br>
+            <span class="comment">  Site en ligne : https://immo-analytika.netlify.app</span><br>
+            <span class="comment">  En attente de modifications...</span>
+          </div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">c</div>
+        <div class="substep-content">
+          <p><strong>Laisse cette fenêtre PowerShell ouverte</strong> pendant que tu travailles avec Claude. Chaque modification d'un fichier .html déclenchera automatiquement un push vers GitHub et un redéploiement Netlify.</p>
+          <div class="alert alert-success">
+            <div class="alert-icon">✅</div>
+            <div class="alert-content">
+              <strong>Délai total : environ 1 à 2 minutes</strong>
+              <p>Claude sauve → PowerShell détecte (3–8 sec) → Git push (5–10 sec) → Netlify redéploie (30–90 sec) → Page mise à jour.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="substep">
+        <div class="substep-bullet">d</div>
+        <div class="substep-content">
+          <p>Pour arrêter le watcher : clique dans la fenêtre PowerShell et appuie sur <strong>Ctrl+C</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÉSULTAT -->
+  <div class="result-box">
+    <div class="result-icon">🎉</div>
+    <h3>Pipeline opérationnel !</h3>
+    <p>À partir de maintenant, chaque fois que Claude produit ou met à jour un rapport HTML, il sera automatiquement en ligne en moins de 2 minutes. Zéro action manuelle de ta part.</p>
+    <br>
+    <p style="font-weight:700; color:var(--primary);">URL à partager avec tes collègues :<br>https://immo-analytika.netlify.app</p>
+  </div>
+
+  <div class="doc-footer">
+    Produit par <strong>Analytika Consulting</strong> · Usage interne · Windows 11 · Git + GitHub + Netlify
+  </div>
+
+</div>
+</body>
+</html>

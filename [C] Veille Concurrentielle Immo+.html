@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veille Concurrentielle — Immo+</title>
+<style>
+:root {
+  --primary: #1E3CB4;
+  --primary-dark: #0D1F6B;
+  --primary-mid: #3D5CC8;
+  --primary-light: #E8EDFB;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --danger-border: #FECACA;
+  --warning: #B45309;
+  --warning-light: #FEF3C7;
+  --warning-border: #FDE68A;
+  --success: #047857;
+  --success-light: #D1FAE5;
+  --success-border: #A7F3D0;
+  --bg: #F1F4FB;
+  --card: #FFFFFF;
+  --border: #DDE3EF;
+  --text: #1E293B;
+  --text-light: #64748B;
+  --text-xlight: #94A3B8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.doc-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+  color: white;
+  padding: 36px 48px 32px;
+}
+.doc-header .badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.doc-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+.doc-header .subtitle {
+  font-size: 15px;
+  opacity: 0.75;
+  margin-bottom: 20px;
+}
+.header-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.header-meta span {
+  font-size: 12px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+/* ── KPI CARDS ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.kpi-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(30,60,180,0.06);
+}
+.kpi-card .kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+.kpi-card .kpi-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-card .kpi-sub {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* ── SECTION ── */
+.section {
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(30,60,180,0.05);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.section-header {
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-header .section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  flex: 1;
+}
+.section-header .section-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.section-body { padding: 20px 24px; }
+
+/* ── ALERT BOX ── */
+.alert {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.alert-content strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.alert-content p { font-size: 13px; line-height: 1.5; }
+.alert-danger { background: var(--danger-light); border: 1px solid var(--danger-border); }
+.alert-danger strong { color: var(--danger); }
+.alert-warning { background: var(--warning-light); border: 1px solid var(--warning-border); }
+.alert-warning strong { color: var(--warning); }
+.alert-info { background: var(--primary-light); border: 1px solid #C3CEF0; }
+.alert-info strong { color: var(--primary); }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead th {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #F8FAFF; }
+tbody td { padding: 11px 14px; vertical-align: middle; line-height: 1.4; }
+tbody td strong { font-weight: 600; color: var(--primary-dark); }
+
+/* ── BADGES ── */
+.badge-danger  { display:inline-block; background:var(--danger-light);  color:var(--danger);  border:1px solid var(--danger-border);  border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-warning { display:inline-block; background:var(--warning-light); color:var(--warning); border:1px solid var(--warning-border); border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-success { display:inline-block; background:var(--success-light); color:var(--success); border:1px solid var(--success-border); border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-neutral { display:inline-block; background:#F1F5F9; color:#475569; border:1px solid #CBD5E1; border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-blue    { display:inline-block; background:var(--primary-light); color:var(--primary);  border:1px solid #C3CEF0; border-radius:20px; padding:2px 10px; font-size:11px; font-weight:700; white-space:nowrap; }
+
+/* ── COMPETITOR CARDS ── */
+.competitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.comp-card {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.comp-card-danger  { border-left: 4px solid var(--danger); }
+.comp-card-warning { border-left: 4px solid #F59E0B; }
+.comp-card-header {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  background: #FAFBFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.comp-card-header .comp-name { font-size: 16px; font-weight: 700; color: var(--primary-dark); }
+.comp-card-header .comp-type { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.comp-card-body { padding: 16px 18px; }
+.comp-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.comp-block { }
+.comp-block-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-light);
+  margin-bottom: 5px;
+}
+.comp-block-content { font-size: 13px; line-height: 1.5; color: var(--text); }
+.comp-block-content ul { list-style: none; padding: 0; }
+.comp-block-content ul li { padding: 2px 0; padding-left: 14px; position: relative; }
+.comp-block-content ul li::before { content: "•"; position: absolute; left: 0; color: var(--text-xlight); }
+.pro li::before { color: var(--success) !important; content: "✓" !important; }
+.con li::before { color: var(--danger) !important; content: "✗" !important; }
+
+.comp-desc { font-size: 13px; line-height: 1.55; color: var(--text); margin-bottom: 12px; }
+
+.watch-box {
+  background: var(--warning-light);
+  border: 1px solid var(--warning-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 12px;
+}
+.watch-box-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--warning); margin-bottom: 5px; }
+.watch-box ul { list-style: none; padding: 0; }
+.watch-box ul li { font-size: 12px; color: var(--text); padding: 2px 0 2px 16px; position: relative; }
+.watch-box ul li::before { content: "→"; position: absolute; left: 0; color: var(--warning); }
+
+/* ── INSIGHT BOX ── */
+.insight-box {
+  background: var(--primary-light);
+  border: 1px solid #C3CEF0;
+  border-left: 4px solid var(--primary);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+}
+.insight-box .insight-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary); margin-bottom: 6px; }
+.insight-box p { font-size: 13px; line-height: 1.5; color: var(--primary-dark); }
+
+/* ── TREND CARDS ── */
+.trend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.trend-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+}
+.trend-card .trend-icon { font-size: 24px; margin-bottom: 10px; }
+.trend-card h4 { font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; }
+.trend-card p { font-size: 13px; color: var(--text); line-height: 1.5; }
+.trend-stat { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* ── RANK TABLE ── */
+.rank-num { display:inline-flex; width:24px; height:24px; border-radius:50%; background:var(--primary); color:white; font-size:12px; font-weight:700; align-items:center; justify-content:center; }
+
+/* ── FOOTER ── */
+.doc-footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-xlight);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+/* ── OPTY BOX ── */
+.opty-box {
+  background: var(--success-light);
+  border: 1px solid var(--success-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 12px;
+}
+.opty-box-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--success); margin-bottom: 5px; }
+.opty-box p { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* ── NAV PILLS ── */
+.nav-pills { display: flex; gap: 8px; flex-wrap: wrap; padding: 16px 24px; background: white; border-bottom: 1px solid var(--border); }
+.nav-pill { font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 20px; background: var(--primary-light); color: var(--primary); text-decoration: none; border: 1px solid #C3CEF0; cursor: pointer; }
+.nav-pill:hover { background: var(--primary); color: white; }
+
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: repeat(2,1fr); }
+  .competitor-grid { grid-template-columns: 1fr; }
+  .trend-grid { grid-template-columns: 1fr; }
+  .comp-grid-2 { grid-template-columns: 1fr; }
+  .doc-header { padding: 24px 20px; }
+  .container { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="badge">🔍 Veille Stratégique</div>
+  <h1>Veille Concurrentielle — Immo+</h1>
+  <div class="subtitle">Marchés immobiliers digitaux · Côte d'Ivoire & Afrique de l'Ouest</div>
+  <div class="header-meta">
+    <span>📅 Mise à jour : 20 avril 2026</span>
+    <span>🏢 Analytika Consulting</span>
+    <span>🎯 Engagement : Immo+ / Afriq'Solus SARL</span>
+    <span>🔄 Document vivant</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-pills">
+  <a class="nav-pill" href="#contexte">Contexte Immo+</a>
+  <a class="nav-pill" href="#carte">Carte Marché</a>
+  <a class="nav-pill" href="#top5">Top 5 Concurrents</a>
+  <a class="nav-pill" href="#classement">Classement Menaces</a>
+  <a class="nav-pill" href="#tendances">Tendances Marché</a>
+</div>
+
+<div class="container">
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">Téléchargements Immo+</div>
+    <div class="kpi-value">20 000</div>
+    <div class="kpi-sub">vs objectif initial 3 000 ✓</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Utilisateurs actifs</div>
+    <div class="kpi-value">3 800</div>
+    <div class="kpi-sub">Conversion 19,5% downloads</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Biens listés</div>
+    <div class="kpi-value">2 000</div>
+    <div class="kpi-sub">4 segments actifs</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Avance sur Tylimmo</div>
+    <div class="kpi-value">20×</div>
+    <div class="kpi-sub">Tylimmo ≈ 1 000 downloads</div>
+  </div>
+</div>
+
+<!-- ALERTE URGENTE -->
+<div class="alert alert-danger">
+  <div class="alert-icon">🚨</div>
+  <div class="alert-content">
+    <strong>Signal Critique — Tylimmo lancé décembre 2025 avec backing d'État</strong>
+    <p>Tylimmo bénéficie du soutien de l'ANAH, Mansa Bank, Bloomfield Investment et du Ministère de la Construction. Immo+ a une avance opérationnelle de ~12 mois (20× plus de downloads). Cette fenêtre se referme. Action immédiate requise sur le positionnement Mobile Money.</p>
+  </div>
+</div>
+
+<!-- CONTEXTE IMMO+ -->
+<div class="section" id="contexte">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <h2>Référentiel Immo+ — Base de la veille</h2>
+    <span class="section-tag">Contexte</span>
+  </div>
+  <div class="section-body">
+    <div class="comp-grid-2" style="gap:16px;">
+      <div>
+        <div class="comp-block-label">Modèle & Segments</div>
+        <div class="comp-block-content">
+          <ul>
+            <li>Marketplace mobile-first, 4 segments</li>
+            <li>📍 Courte durée · Longue durée · Vente · Meubles</li>
+            <li>Commission actuelle : <strong>7%</strong> (pénétration) → modèle cible : <strong>10%</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="comp-block-label">Différenciateurs clés</div>
+        <div class="comp-block-content">
+          <ul class="pro">
+            <li><strong>Mobile Money intégré</strong> (Wave + Orange Money)</li>
+            <li>Agrément ministériel N° AB 0010081</li>
+            <li>Mobile-first — audience ivoirienne locale</li>
+            <li>Segment meubles sans concurrence directe</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="comp-block-label">Cibles prioritaires</div>
+        <div class="comp-block-content">
+          <ul>
+            <li>Jeunes actifs ivoiriens, Abidjan</li>
+            <li>Diaspora et expatriés (courte durée)</li>
+            <li>Propriétaires cherchant à louer/vendre</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="comp-block-label">Entité légale</div>
+        <div class="comp-block-content">
+          <ul>
+            <li>Afriq'Solus SARL — Immo+ est la marque produit</li>
+            <li>IDU : CI-2023-0057027 C</li>
+            <li>7 développeurs (CI, France, Chine)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARTE MARCHÉ -->
+<div class="section" id="carte">
+  <div class="section-header">
+    <div class="section-icon">🗺️</div>
+    <h2>Carte du Marché Concurrentiel</h2>
+    <span class="section-tag">Vue d'ensemble</span>
+  </div>
+  <div class="section-body">
+
+    <div class="comp-block-label" style="margin-bottom:12px;">Concurrents Directs — Plateformes immobilières CI</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Segments</th>
+            <th>App Mobile</th>
+            <th>Mobile Money</th>
+            <th>Menace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Babimo</strong></td>
+            <td>Portail web + app</td>
+            <td>Location longue durée, vente</td>
+            <td>✅ iOS + Android</td>
+            <td>❌ Non confirmé</td>
+            <td><span class="badge-danger">🔴 Élevée</span></td>
+          </tr>
+          <tr>
+            <td><strong>Tylimmo</strong></td>
+            <td>App mobile + portail</td>
+            <td>Location-vente (rent-to-own)</td>
+            <td>✅ Android</td>
+            <td>❌ Non confirmé</td>
+            <td><span class="badge-danger">🔴 Élevée</span></td>
+          </tr>
+          <tr>
+            <td><strong>KÔKÔ</strong></td>
+            <td>App mobile</td>
+            <td>Vente, achat</td>
+            <td>✅ Mobile</td>
+            <td>❌ Non confirmé</td>
+            <td><span class="badge-warning">🟡 Moyen</span></td>
+          </tr>
+          <tr>
+            <td><strong>Djekou</strong></td>
+            <td>App mobile multi-segment</td>
+            <td>Immo + Auto</td>
+            <td>✅ Android</td>
+            <td>❌ Non confirmé</td>
+            <td><span class="badge-success">🟢 Faible</span></td>
+          </tr>
+          <tr>
+            <td><strong>Batirici / Moboo / Officiel</strong></td>
+            <td>Portails web</td>
+            <td>Location, vente</td>
+            <td>❌ Web only</td>
+            <td>❌</td>
+            <td><span class="badge-success">🟢 Faible</span></td>
+          </tr>
+          <tr>
+            <td><strong>Abidjan.net Immo</strong></td>
+            <td>Section portail généraliste</td>
+            <td>Large spectre</td>
+            <td>Partiel</td>
+            <td>❌</td>
+            <td><span class="badge-warning">🟡 Moyen</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="comp-block-label" style="margin-bottom:12px;">Concurrents Indirects & Nouveaux Entrants</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Risque pour Immo+</th>
+            <th>Alerte</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Airbnb</strong></td>
+            <td>Plateforme int'le courte durée</td>
+            <td>Segment courte durée premium / expatriés · 924 listings actifs à Cocody</td>
+            <td><span class="badge-warning">🟡 Moyen-Élevé</span></td>
+          </tr>
+          <tr>
+            <td><strong>Facebook / WhatsApp Groupes</strong></td>
+            <td>Réseaux sociaux — canal informel</td>
+            <td>Canal dominant du marché informel CI — comportement à disrupter</td>
+            <td><span class="badge-danger">🔴 Structurel</span></td>
+          </tr>
+          <tr>
+            <td><strong>Coin Afrique</strong></td>
+            <td>Petites annonces généralistes</td>
+            <td>Substitut gratuit pour particuliers</td>
+            <td><span class="badge-warning">🟡 Moyen</span></td>
+          </tr>
+          <tr>
+            <td><strong>PropTech régionale (HouseAfrica, BuyLetLive)</strong></td>
+            <td>Startups Nigeria/Kenya en expansion</td>
+            <td>Risque à 18–24 mois sur le marché CI</td>
+            <td><span class="badge-success">🟢 Surveillance</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOP 5 CONCURRENTS -->
+<div class="section" id="top5">
+  <div class="section-header">
+    <div class="section-icon">⚡</div>
+    <h2>Top 5 — Analyse Approfondie des Concurrents Critiques</h2>
+    <span class="section-tag">Priorité Stratégique</span>
+  </div>
+  <div class="section-body">
+
+    <!-- TYLIMMO -->
+    <div class="comp-card comp-card-danger" style="margin-bottom:20px;">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-name">#1 — TYLIMMO</div>
+          <div class="comp-type">App mobile + portail · Location-vente (rent-to-own) · Lancé déc. 2025</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="badge-danger">🔴 Menace ÉLEVÉE</span>
+          <span class="badge-danger">Impact : FORT</span>
+        </div>
+      </div>
+      <div class="comp-card-body">
+        <p class="comp-desc">Plateforme lancée officiellement en décembre 2025, en présence des ministres de la Construction et de la Communication. Mission : 100 000 logements en location-vente d'ici 2035. Soutenue par l'ANAH, Mansa Bank, Bloomfield Investment & Intelligence, Joseph Titrisation, Saar Assurance, CDAIM.</p>
+        <div class="comp-grid-2">
+          <div class="comp-block">
+            <div class="comp-block-label">Positionnement vs Immo+</div>
+            <div class="comp-block-content">Tylimmo vise l'accession à la propriété (logement social) ; Immo+ vise les transactions courantes (location + vente classique). Chevauchement partiel sur les ménages à revenus moyens. Risque d'élargissement à la location classique à moyen terme.</div>
+          </div>
+          <div class="comp-block">
+            <div class="comp-block-label">Offre & Pricing</div>
+            <div class="comp-block-content">Loyer mensuel imputé vers l'achat. Modèle rent-to-own. Pricing non publié. Probablement subventionné par l'État pour les ménages modestes.</div>
+          </div>
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--success);">Forces vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="pro">
+                <li>Backing État + institutions financières</li>
+                <li>Crédibilité institutionnelle immédiate</li>
+                <li>Budget com' probablement supérieur</li>
+                <li>Segment "propriété" non adressé par Immo+</li>
+              </ul>
+            </div>
+          </div>
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--danger);">Faiblesses vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="con">
+                <li>~1 000 downloads vs 20 000 Immo+ (12 mois de retard)</li>
+                <li>Modèle rent-to-own complexe, lent</li>
+                <li>Focus logements neufs/sociaux = spectre étroit</li>
+                <li>Pas de Mobile Money confirmé</li>
+                <li>Exécution lente (projet 2035)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="watch-box">
+          <div class="watch-box-label">⚠️ Watch Points — Q2/Q3 2026</div>
+          <ul>
+            <li>Tylimmo élargit-il sa proposition aux locations classiques ?</li>
+            <li>Partenariats avec des agences immobilières annoncés ?</li>
+            <li>Activation Mobile Money sur la plateforme ?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- BABIMO -->
+    <div class="comp-card comp-card-danger" style="margin-bottom:20px;">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-name">#2 — BABIMO</div>
+          <div class="comp-type">Portail web + App iOS/Android · "1er portail immobilier de référence en CI" (auto-positionné)</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="badge-danger">🔴 Menace ÉLEVÉE</span>
+          <span class="badge-danger">Impact : FORT</span>
+        </div>
+      </div>
+      <div class="comp-card-body">
+        <p class="comp-desc">Leader établi sur la location longue durée et la vente en CI. Réseau de professionnels agréés uniquement (agences + promoteurs). Fort positionnement anti-escroquerie. Organise les "Babimo Days" (salon investissement immobilier, 3e édition). Présence presse nationale forte.</p>
+        <div class="comp-grid-2">
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--success);">Forces vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="pro">
+                <li>Marque établie et connue ("1er portail")</li>
+                <li>Réseau d'agences B2B solide</li>
+                <li>App mobile disponible iOS + Android</li>
+                <li>Crédibilité anti-escroquerie ancrée</li>
+              </ul>
+            </div>
+          </div>
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--danger);">Faiblesses vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="con">
+                <li>Pas de segment courte durée ← opportunité Immo+</li>
+                <li>Probablement pas de Mobile Money</li>
+                <li>Modèle agences uniquement (pas C2C)</li>
+                <li>Web-first, moins fluide sur mobile</li>
+                <li>Moins agile sur nouvelles features</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="watch-box">
+          <div class="watch-box-label">⚠️ Watch Points</div>
+          <ul>
+            <li>Babimo lance-t-il un segment courte durée ?</li>
+            <li>Partenariat Mobile Money en discussion ?</li>
+            <li>Ouverture aux particuliers (C2C) ?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- AIRBNB -->
+    <div class="comp-card comp-card-warning" style="margin-bottom:20px;">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-name">#3 — AIRBNB (présence locale Abidjan)</div>
+          <div class="comp-type">Plateforme internationale courte durée · 924 listings actifs à Cocody seul</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="badge-warning">🟡 Menace MOYEN-ÉLEVÉE</span>
+          <span class="badge-warning">Impact : Courte durée</span>
+        </div>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-grid-2" style="margin-bottom:12px;">
+          <div class="kpi-card" style="padding:14px;">
+            <div class="kpi-label">Listings actifs · Cocody</div>
+            <div class="kpi-value" style="font-size:20px;">924</div>
+            <div class="kpi-sub">+136 Marcory · +29 Yopougon</div>
+          </div>
+          <div class="kpi-card" style="padding:14px;">
+            <div class="kpi-label">ADR moyen Abidjan</div>
+            <div class="kpi-value" style="font-size:20px;">64 USD</div>
+            <div class="kpi-sub">Occupancy moy. : 41%</div>
+          </div>
+          <div class="kpi-card" style="padding:14px;">
+            <div class="kpi-label">Revenu mensuel moy./listing</div>
+            <div class="kpi-value" style="font-size:20px;">~4 000</div>
+            <div class="kpi-sub">USD avant charges</div>
+          </div>
+          <div class="kpi-card" style="padding:14px;">
+            <div class="kpi-label">Réglementation CI</div>
+            <div class="kpi-value" style="font-size:20px;">Aucune</div>
+            <div class="kpi-sub">Pas de cap, pas de min. de nuits</div>
+          </div>
+        </div>
+        <div class="comp-grid-2">
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--success);">Forces vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="pro">
+                <li>Marque mondiale — trust diaspora/expatriés</li>
+                <li>SEO/ASO international massive</li>
+                <li>Système reviews/garanties rodé</li>
+              </ul>
+            </div>
+          </div>
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--danger);">Faiblesses vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="con">
+                <li>Carte bancaire requise (exclut marché local)</li>
+                <li>Zéro Mobile Money (Wave, Orange Money)</li>
+                <li>Commission 15–20% vs 7% Immo+</li>
+                <li>Interface non adaptée au contexte ivoirien</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="opty-box">
+          <div class="opty-box-label">💡 Opportunité pour Immo+</div>
+          <p>Pitcher les 924+ hôtes Airbnb actifs à Cocody pour un double listing sur Immo+ : même bien, audience locale Mobile Money en plus, commission inférieure. Distribution additive, pas concurrente.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- KÔKÔ -->
+    <div class="comp-card comp-card-warning" style="margin-bottom:20px;">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-name">#4 — KÔKÔ APP</div>
+          <div class="comp-type">App mobile · Vente et achat immobilier · Positionnement anti-escroquerie</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="badge-warning">🟡 Menace MOYENNE</span>
+          <span class="badge-warning">Impact : Segment Vente</span>
+        </div>
+      </div>
+      <div class="comp-card-body">
+        <p class="comp-desc">Application mobile récente, focus vente et achat. Positionnement fort sur l'authentification et la traçabilité documentaire. Cible : propriétaires, acheteurs, mandataires légaux.</p>
+        <div class="comp-grid-2">
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--success);">Forces vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="pro">
+                <li>Focus et expertise sur la vente</li>
+                <li>Angle sécurité/anti-fraude bien communicé</li>
+              </ul>
+            </div>
+          </div>
+          <div class="comp-block">
+            <div class="comp-block-label" style="color:var(--danger);">Faiblesses vs Immo+</div>
+            <div class="comp-block-content">
+              <ul class="con">
+                <li>Limité à la vente (pas de récurrence)</li>
+                <li>Nouveau — base utilisateurs probablement faible</li>
+                <li>Pas de Mobile Money confirmé</li>
+                <li>Pas de courte durée ni meubles</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="insight-box" style="margin-top:12px;">
+          <div class="insight-label">💡 Réponse recommandée</div>
+          <p>L'agrément Ministère de la Construction (AB 0010081) est une arme supérieure à l'argument KÔKÔ. Immo+ doit le mettre en avant explicitement dans sa communication vente.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FACEBOOK/WHATSAPP -->
+    <div class="comp-card comp-card-warning" style="margin-bottom:0;">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-name">#5 — FACEBOOK / WHATSAPP GROUPES</div>
+          <div class="comp-type">Réseaux sociaux — Canal informel dominant en Côte d'Ivoire</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="badge-danger">🔴 Menace STRUCTURELLE</span>
+          <span class="badge-warning">Impact : Acquisition</span>
+        </div>
+      </div>
+      <div class="comp-card-body">
+        <p class="comp-desc">Les groupes Facebook et WhatsApp sont le canal principal de recherche de logement informel en CI. Gratuit, viral, sans commission — mais sans sécurité ni garantie. C'est le comportement à disrupter pour qu'Immo+ devienne le réflexe par défaut.</p>
+        <div class="opty-box">
+          <div class="opty-box-label">💡 Stratégie recommandée</div>
+          <p>Aller chercher les utilisateurs là où ils sont : partenariats avec les admins des grands groupes immo Facebook Abidjan + Facebook Ads géo-ciblés. Rendre le switch vers Immo+ frictionless (même expérience, mais sécurisée et avec Mobile Money).</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CLASSEMENT MENACES -->
+<div class="section" id="classement">
+  <div class="section-header">
+    <div class="section-icon">📊</div>
+    <h2>Classement Global par Niveau de Menace</h2>
+    <span class="section-tag">Priorisation</span>
+  </div>
+  <div class="section-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rang</th>
+            <th>Concurrent</th>
+            <th>Menace</th>
+            <th>Impact potentiel</th>
+            <th>Urgence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-num">1</span></td>
+            <td><strong>Tylimmo</strong></td>
+            <td><span class="badge-danger">🔴 Élevée</span></td>
+            <td>Fort — institutionnel</td>
+            <td><span class="badge-danger">🔴 Immédiate</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">2</span></td>
+            <td><strong>Babimo</strong></td>
+            <td><span class="badge-danger">🔴 Élevée</span></td>
+            <td>Fort — leader établi</td>
+            <td><span class="badge-warning">🟡 Court terme</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">3</span></td>
+            <td><strong>Facebook / WhatsApp</strong></td>
+            <td><span class="badge-danger">🔴 Structurelle</span></td>
+            <td>Fort — comportement à disrupter</td>
+            <td><span class="badge-danger">🔴 Immédiate</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">4</span></td>
+            <td><strong>Airbnb</strong></td>
+            <td><span class="badge-warning">🟡 Moyen-Élevée</span></td>
+            <td>Ciblé courte durée</td>
+            <td><span class="badge-warning">🟡 Court terme</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">5</span></td>
+            <td><strong>KÔKÔ</strong></td>
+            <td><span class="badge-warning">🟡 Moyenne</span></td>
+            <td>Partiel — segment vente</td>
+            <td><span class="badge-success">🟢 Moyen terme</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">6</span></td>
+            <td><strong>Djekou</strong></td>
+            <td><span class="badge-success">🟢 Faible</span></td>
+            <td>Limité</td>
+            <td><span class="badge-success">🟢 Surveillance</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">7</span></td>
+            <td><strong>Batirici / Moboo / Officiel</strong></td>
+            <td><span class="badge-success">🟢 Faible</span></td>
+            <td>Très partiel</td>
+            <td><span class="badge-success">🟢 Surveillance</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">8</span></td>
+            <td><strong>PropTech régionale</strong></td>
+            <td><span class="badge-warning">🟡 Faible (moyen terme)</span></td>
+            <td>Risque à 18–24 mois</td>
+            <td><span class="badge-success">🟢 Veille</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TENDANCES MARCHÉ -->
+<div class="section" id="tendances">
+  <div class="section-header">
+    <div class="section-icon">📈</div>
+    <h2>Tendances Marché — Signaux à Suivre</h2>
+    <span class="section-tag">Contexte Macro</span>
+  </div>
+  <div class="section-body">
+    <div class="trend-grid">
+      <div class="trend-card">
+        <div class="trend-icon">🏙️</div>
+        <div class="trend-stat">377 Mds USD</div>
+        <h4>Marché immobilier CI 2025</h4>
+        <p>→ 459 Mds USD en 2029 · CAGR ~5%. Déficit structurel de <strong>+800 000 logements</strong>. Tension = opportunité de marché durable pour Immo+.</p>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">🏨</div>
+        <div class="trend-stat">924 listings</div>
+        <h4>Airbnb actifs à Cocody seul</h4>
+        <p>ADR ~64 USD · Occupancy 41% · Revenu moyen ~4 000 USD/mois. <strong>Marché non réglementé</strong> en CI = liberté d'action pour Immo+.</p>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">📱</div>
+        <div class="trend-stat">+5→10%/an</div>
+        <h4>Hausse des prix zones premium</h4>
+        <p>Cocody, Riviera, Zone 4, Angré en forte hausse. Digitalisation progressive du secteur — contrats à distance, paiements électroniques en progression.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="alert alert-info">
+      <div class="alert-icon">🌍</div>
+      <div class="alert-content">
+        <strong>PropTech africaine — financement en recul mais secteur actif</strong>
+        <p>340 startups immo en Afrique avec 29.2M USD de seed total (fin 2024). H1 2024 : >2M USD levés. Acteurs à surveiller pour extension Afrique de l'Ouest : HouseAfrica, BuyLetLive, Estate Intel. Horizon d'arrivée sur le marché CI estimé : 18–24 mois.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  Produit par <strong>Analytika Consulting</strong> · Usage interne · Dernière mise à jour : 20 avril 2026 · Document vivant — mise à jour continue
+</div>
+
+</div>
+</body>
+</html>

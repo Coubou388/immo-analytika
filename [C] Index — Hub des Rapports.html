@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immo+ — Dossier Analytika Consulting</title>
+<style>
+:root {
+  --primary: #1E3CB4;
+  --primary-dark: #0D1F6B;
+  --primary-mid: #3D5CC8;
+  --primary-light: #E8EDFB;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --warning: #B45309;
+  --warning-light: #FEF3C7;
+  --success: #047857;
+  --success-light: #D1FAE5;
+  --bg: #F1F4FB;
+  --card: #FFFFFF;
+  --border: #DDE3EF;
+  --text: #1E293B;
+  --text-light: #64748B;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+  color: white;
+  padding: 48px 32px 40px;
+  text-align: center;
+}
+.header .logo {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.header p {
+  font-size: 16px;
+  opacity: 0.75;
+  margin-bottom: 24px;
+}
+.header-meta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.header-meta span {
+  font-size: 12px;
+  opacity: 0.7;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(30,60,180,0.06);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(30,60,180,0.12);
+}
+
+.card-top {
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.icon-blue   { background: var(--primary-light); }
+.icon-red    { background: var(--danger-light); }
+.icon-yellow { background: var(--warning-light); }
+.icon-green  { background: var(--success-light); }
+
+.card-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+.tag-blue   { color: var(--primary); }
+.tag-red    { color: var(--danger); }
+.tag-yellow { color: var(--warning); }
+.tag-green  { color: var(--success); }
+
+.card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.55;
+  padding: 0 24px;
+  margin-bottom: 16px;
+}
+
+.card-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 24px;
+  margin-bottom: 20px;
+}
+.pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--bg);
+  color: var(--text-light);
+  border: 1px solid var(--border);
+}
+
+.card-footer {
+  padding: 14px 24px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.card-footer span { opacity: 0.6; font-size: 18px; }
+
+.card-verdict {
+  margin: 0 24px 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.verdict-warning { background: var(--warning-light); color: var(--warning); border: 1px solid #FDE68A; }
+.verdict-info    { background: var(--primary-light); color: var(--primary); border: 1px solid #C3CEF0; }
+
+.divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+.context-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin-bottom: 20px;
+}
+.context-box h3 { font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-bottom: 14px; }
+.context-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.ctx-stat { text-align: center; }
+.ctx-num { font-size: 24px; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 4px; }
+.ctx-label { font-size: 11px; color: var(--text-light); }
+
+.confidential {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-light);
+  font-size: 12px;
+  margin-top: 8px;
+}
+.conf-badge {
+  display: inline-block;
+  background: var(--danger-light);
+  color: var(--danger);
+  border: 1px solid #FECACA;
+  border-radius: 20px;
+  padding: 3px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 680px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .context-grid { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">🏢 Analytika Consulting</div>
+  <h1>Immo+ — Dossier Stratégique</h1>
+  <p>Engagement Afriq'Solus SARL · Due diligence & veille concurrentielle</p>
+  <div class="header-meta">
+    <span>📅 Avril 2026</span>
+    <span>🇨🇮 Marché Côte d'Ivoire</span>
+    <span>🔒 Usage interne</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <div class="context-box">
+    <h3>📊 Immo+ en chiffres clés</h3>
+    <div class="context-grid">
+      <div class="ctx-stat">
+        <div class="ctx-num">20 000</div>
+        <div class="ctx-label">Téléchargements</div>
+      </div>
+      <div class="ctx-stat">
+        <div class="ctx-num">3 800</div>
+        <div class="ctx-label">Utilisateurs actifs</div>
+      </div>
+      <div class="ctx-stat">
+        <div class="ctx-num">2 000</div>
+        <div class="ctx-label">Biens listés</div>
+      </div>
+      <div class="ctx-stat">
+        <div class="ctx-num">7%</div>
+        <div class="ctx-label">Commission actuelle</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">📁 Documents du dossier</div>
+
+  <div class="cards-grid">
+
+    <!-- AUDIT REVIEW -->
+    <a class="card" href="audit-review.html">
+      <div class="card-top">
+        <div class="card-icon icon-yellow">📋</div>
+        <div>
+          <div class="card-tag tag-yellow">Due Diligence</div>
+          <div class="card-title">Audit Review — Documents Reçus</div>
+        </div>
+      </div>
+      <div class="card-verdict verdict-warning">
+        ⏸ Verdict provisoire : En attente — relance nécessaire
+      </div>
+      <div class="card-desc">Analyse des 6 documents transmis par Moïse vs checklist complète de 20 items. Catégories Legal, Finance, Produit, Commercial.</div>
+      <div class="card-pills">
+        <span class="pill">6 docs reçus</span>
+        <span class="pill">14 items manquants</span>
+        <span class="pill">1 corrompu</span>
+      </div>
+      <div class="card-footer">Ouvrir le rapport <span>→</span></div>
+    </a>
+
+    <!-- VEILLE CONCURRENTIELLE -->
+    <a class="card" href="veille-concurrentielle.html">
+      <div class="card-top">
+        <div class="card-icon icon-blue">🔍</div>
+        <div>
+          <div class="card-tag tag-blue">Veille Stratégique</div>
+          <div class="card-title">Veille Concurrentielle Immo+</div>
+        </div>
+      </div>
+      <div class="card-verdict verdict-info">
+        🚨 Tylimmo lancé déc. 2025 — fenêtre de 12 mois à exploiter
+      </div>
+      <div class="card-desc">Carte du marché, analyse approfondie des Top 5 concurrents (Tylimmo, Babimo, Airbnb, KÔKÔ, Facebook), classement des menaces, tendances marché CI.</div>
+      <div class="card-pills">
+        <span class="pill">8 concurrents</span>
+        <span class="pill">Top 5 analysés</span>
+        <span class="pill">Données marché 2025</span>
+      </div>
+      <div class="card-footer">Ouvrir le rapport <span>→</span></div>
+    </a>
+
+    <!-- PLAN D'ACTION -->
+    <a class="card" href="plan-action.html">
+      <div class="card-top">
+        <div class="card-icon icon-red">⚡</div>
+        <div>
+          <div class="card-tag tag-red">Plan d'Action</div>
+          <div class="card-title">Plan d'Action Concurrentiel</div>
+        </div>
+      </div>
+      <div class="card-desc">11 recommandations stratégiques priorisées — quick wins immédiats, actions court terme et moyen/long terme. Tableau de synthèse avec facilité d'exécution.</div>
+      <div class="card-pills">
+        <span class="pill">3 Quick Wins 🔴</span>
+        <span class="pill">4 Court terme 🟡</span>
+        <span class="pill">3 Long terme 🟢</span>
+      </div>
+      <div class="card-footer">Ouvrir le rapport <span>→</span></div>
+    </a>
+
+    <!-- QUESTIONS STRATÉGIQUES -->
+    <a class="card" href="questions-strategiques.html">
+      <div class="card-top">
+        <div class="card-icon icon-green">❓</div>
+        <div>
+          <div class="card-tag tag-green">Due Diligence</div>
+          <div class="card-title">Questions Stratégiques pour Immo+</div>
+        </div>
+      </div>
+      <div class="card-desc">35 questions à poser à Moïse, organisées en 5 blocs (Finances, Produit, Concurrence, Gouvernance, Vision). Hypothèses non validées identifiées.</div>
+      <div class="card-pills">
+        <span class="pill">35 questions</span>
+        <span class="pill">5 blocs</span>
+        <span class="pill">7 hypothèses à valider</span>
+      </div>
+      <div class="card-footer">Ouvrir le rapport <span>→</span></div>
+    </a>
+
+  </div>
+
+  <div class="confidential">
+    <div class="conf-badge">🔒 Confidentiel</div>
+    <p>Document produit par Analytika Consulting · Usage interne uniquement · Ne pas diffuser sans autorisation</p>
+  </div>
+
+</div>
+</body>
+</html>

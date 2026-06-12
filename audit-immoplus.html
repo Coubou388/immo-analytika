@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Opérationnel Immo+ — Analytika Consulting</title>
+<style>
+  :root {
+    --navy: #0D1B3E;
+    --blue: #1B8FCA;
+    --cyan: #00B4D8;
+    --light: #E8F6FA;
+    --white: #ffffff;
+    --gray: #f4f6f9;
+    --text: #1a1a2e;
+    --sub: #555577;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--gray);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BANNER ── */
+  .banner {
+    background: var(--navy);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .logo-mark {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo-text { line-height: 1.1; }
+  .logo-text span:first-child {
+    display: block; font-size: 15px; font-weight: 700;
+    color: var(--white); letter-spacing: 1.5px;
+  }
+  .logo-text span:last-child {
+    display: block; font-size: 11px; color: var(--cyan);
+    letter-spacing: 0.5px;
+  }
+  .banner-right {
+    margin-left: auto;
+    font-size: 12px; color: rgba(255,255,255,0.5);
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: var(--navy);
+    padding: 0 32px 14px;
+  }
+  .progress-label {
+    font-size: 11px; color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+    display: flex; justify-content: space-between;
+  }
+  .progress-bar-bg {
+    height: 4px; background: rgba(255,255,255,0.12);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--cyan);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    max-width: 740px;
+    margin: 36px auto 80px;
+    padding: 0 16px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+  }
+  .cover-top {
+    background: var(--navy);
+    padding: 40px 40px 32px;
+    text-align: center;
+  }
+  .cover-top h1 {
+    font-size: 26px; font-weight: 800;
+    color: var(--white); margin-bottom: 6px;
+  }
+  .cover-top h2 { font-size: 32px; color: var(--cyan); font-weight: 900; }
+  .cover-top p { color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 10px; }
+  .cover-body { padding: 28px 40px; }
+  .cover-body p {
+    font-size: 14px; color: var(--sub); line-height: 1.7;
+    border-left: 3px solid var(--cyan);
+    padding-left: 16px;
+  }
+  .cover-meta {
+    display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;
+  }
+  .cover-meta div {
+    font-size: 12px; color: var(--sub);
+  }
+  .cover-meta strong { color: var(--navy); display: block; font-size: 13px; }
+
+  /* ── SECTION CARD ── */
+  .section-card {
+    display: none;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+  }
+  .section-card.active { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: stretch;
+  }
+  .section-num {
+    background: var(--navy);
+    color: var(--cyan);
+    font-size: 22px; font-weight: 900;
+    min-width: 64px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px 0;
+    flex-shrink: 0;
+  }
+  .section-title-block {
+    background: var(--blue);
+    padding: 18px 24px;
+    flex: 1;
+  }
+  .section-title-block h3 {
+    color: var(--white); font-size: 16px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .section-title-block p {
+    color: rgba(255,255,255,0.75); font-size: 12px; margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .section-body { padding: 28px 36px 20px; }
+
+  /* ── SUBSECTION ── */
+  .sub-label {
+    font-size: 11px; font-weight: 700; color: var(--cyan);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 28px 0 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sub-label::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sub-label:first-child { margin-top: 0; }
+
+  /* ── QUESTION ── */
+  .q-block { margin-bottom: 20px; }
+  .q-block label {
+    display: block;
+    font-size: 13.5px; font-weight: 500; color: var(--text);
+    margin-bottom: 8px; line-height: 1.5;
+  }
+  .q-num {
+    display: inline-block;
+    background: var(--light);
+    color: var(--blue);
+    font-size: 10px; font-weight: 700;
+    padding: 1px 7px; border-radius: 10px;
+    margin-right: 6px;
+  }
+  textarea {
+    width: 100%;
+    border: 1.5px solid #dde4f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: var(--text);
+    resize: vertical;
+    min-height: 68px;
+    transition: border-color 0.2s;
+    background: var(--white);
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(27,143,202,0.1);
+  }
+  textarea::placeholder { color: #bbb; font-style: italic; }
+
+  /* ── NAV BUTTONS ── */
+  .nav-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 36px 28px;
+    border-top: 1px solid #eef2f8;
+    gap: 12px;
+  }
+  .btn {
+    padding: 11px 28px;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-prev {
+    background: transparent;
+    color: var(--sub);
+    border: 1.5px solid #dde4f0;
+  }
+  .btn-prev:hover { background: var(--gray); }
+  .btn-next {
+    background: var(--blue);
+    color: var(--white);
+    margin-left: auto;
+  }
+  .btn-next:hover { background: #1580b5; }
+  .btn-submit {
+    background: var(--navy);
+    color: var(--white);
+    padding: 13px 36px;
+    font-size: 15px;
+    margin-left: auto;
+  }
+  .btn-submit:hover { background: #162d63; }
+
+  /* ── CONFIRMATION ── */
+  #confirmation {
+    display: none;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  #confirmation .check {
+    width: 72px; height: 72px;
+    background: var(--cyan);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px; color: white;
+  }
+  #confirmation h2 { color: var(--navy); font-size: 24px; margin-bottom: 12px; }
+  #confirmation p { color: var(--sub); font-size: 15px; line-height: 1.7; max-width: 420px; margin: 0 auto; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .cover-body, .section-body { padding: 20px 20px 16px; }
+    .nav-bar { padding: 16px 20px 20px; }
+    .cover-top { padding: 28px 20px 24px; }
+    .cover-top h2 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="logo-mark"></div>
+  <div class="logo-text">
+    <span>ANALYTIKA</span>
+    <span>Consulting</span>
+  </div>
+  <div class="banner-right">Confidentiel · Juin 2026</div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span id="prog-label">Section 1 sur 11</span>
+    <span id="prog-pct">9%</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="prog-fill" style="width:9%"></div>
+  </div>
+</div>
+
+<!-- FORM -->
+<form id="auditForm" action="https://formsubmit.co/COUBOUDIABAGATE@gmail.com" method="POST">
+
+  <!-- formsubmit config -->
+  <input type="hidden" name="_subject" value="Audit Opérationnel Immo+ — Réponses de Moïse">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="">
+
+<div class="container">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-top">
+      <h1>AUDIT OPÉRATIONNEL</h1>
+      <h2>IMMO+</h2>
+      <p>État des lieux 360° avant démarrage de la collaboration</p>
+    </div>
+    <div class="cover-body">
+      <p>Ce formulaire me permettra de cartographier précisément l'état actuel d'Immo+ pour construire une stratégie de croissance efficace, fixer des objectifs réalistes et mesurer l'impact réel de mon intervention. Toutes les informations partagées restent <strong>strictement confidentielles</strong>.</p>
+      <div class="cover-meta">
+        <div><strong>Préparé par</strong>Amenan C. Sidiki — Head of Strategy &amp; BD</div>
+        <div><strong>Destinataire</strong>Moïse — Co-fondateur, Immo+</div>
+        <div><strong>Date</strong>Juin 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 01 ── -->
+  <div class="section-card active" id="sec-1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title-block">
+        <h3>Gouvernance et prise de décision</h3>
+        <p>Comment les décisions stratégiques sont-elles prises chez Immo+ ?</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Structure décisionnelle</div>
+      <div class="q-block"><label><span class="q-num">Q1</span>Qui a le pouvoir de décision finale sur les sujets stratégiques : go-to-market, partenariats, tarification ?</label><textarea name="Q01_decision_finale" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q2</span>Quelle est la marge de manœuvre réelle d'Amenan pour proposer et implémenter des changements sans validation systématique ?</label><textarea name="Q01_marge_manoeuvre" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q3</span>Y a-t-il un comité de direction ou des réunions stratégiques régulières ? À quelle fréquence ?</label><textarea name="Q01_comite_direction" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q4</span>Comment les désaccords stratégiques sont-ils tranchés au sein de l'équipe fondatrice ?</label><textarea name="Q01_desaccords" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Capacité d'exécution</div>
+      <div class="q-block"><label><span class="q-num">Q5</span>L'équipe actuelle est-elle en mesure d'exécuter des recommandations stratégiques ? Quelles compétences manquent ?</label><textarea name="Q01_capacite_execution" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q6</span>Y a-t-il des ressources humaines disponibles pour appuyer sur le terrain (commercial, marketing, opérations) ?</label><textarea name="Q01_ressources_terrain" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q7</span>Comment les priorités sont-elles communiquées et suivies au sein de l'équipe ?</label><textarea name="Q01_priorites_suivi" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Contraintes et lignes rouges</div>
+      <div class="q-block"><label><span class="q-num">Q8</span>Y a-t-il des engagements déjà pris avec des partenaires ou investisseurs qui contraignent la stratégie ?</label><textarea name="Q01_engagements_existants" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q9</span>Sur quels sujets n'es-tu pas prêt à bouger, et qui pourraient limiter l'action stratégique ?</label><textarea name="Q01_lignes_rouges" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q10</span>Y a-t-il des décisions passées (produit, partenariats, positionnement) difficiles à remettre en question ?</label><textarea name="Q01_decisions_passees" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-next" onclick="goTo(2)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 02 ── -->
+  <div class="section-card" id="sec-2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title-block">
+        <h3>Diagnostic commercial et croissance</h3>
+        <p>Où la croissance stagne-t-elle, où accélère-t-elle, et où sont les opportunités ?</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Structure et performance de l'équipe commerciale</div>
+      <div class="q-block"><label><span class="q-num">Q11</span>Qui fait quoi au sein de l'équipe commerciale : rôles, responsabilités et périmètres d'action de chaque membre ?</label><textarea name="Q02_equipe_roles" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q12</span>Comment la performance individuelle de chaque membre de l'équipe commerciale est-elle évaluée ?</label><textarea name="Q02_evaluation_perf" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q13</span>Quels sont les KPIs définis pour chaque poste commercial : CA, listings activés, leads générés, taux de transformation ?</label><textarea name="Q02_kpis_postes" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q14</span>Disposez-vous d'une grille d'évaluation formelle avec un suivi hebdomadaire, mensuel et annuel ?</label><textarea name="Q02_grille_evaluation" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q15</span>Un budget commercial est-il défini, alloué et suivi régulièrement ? Comment est-il piloté et contrôlé ?</label><textarea name="Q02_budget_commercial" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q16</span>Quels outils utilisez-vous pour suivre la performance de l'équipe commerciale (CRM, tableaux de bord, Excel…) ?</label><textarea name="Q02_outils_suivi" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q17</span>Avez-vous un tableau de bord dédié à la fonction commerciale, distinct du dashboard global de l'application ?</label><textarea name="Q02_dashboard_commercial" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q18</span>Quels indicateurs sont suivis : CA, taux de conversion, volume de leads, coût d'acquisition, rétention, performance individuelle ?</label><textarea name="Q02_indicateurs" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q19</span>Comment les objectifs commerciaux sont-ils fixés, suivis en cours d'exécution et ajustés si nécessaire ?</label><textarea name="Q02_objectifs_pilotage" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">État réel de la croissance</div>
+      <div class="q-block"><label><span class="q-num">Q20</span>Quel est le volume de listings actifs sur la plateforme aujourd'hui et quelle est sa tendance sur 6 mois ?</label><textarea name="Q02_volume_listings" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q21</span>Quel est le chiffre d'affaires mensuel réel sur les 12 derniers mois — croissance, stagnation ou déclin ?</label><textarea name="Q02_ca_mensuel" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q22</span>Y a-t-il des mois où la croissance a naturellement accéléré ? Pour quelle raison ?</label><textarea name="Q02_acceleration" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Entonnoir de conversion</div>
+      <div class="q-block"><label><span class="q-num">Q23</span>Sur 100 visiteurs de la plateforme, combien contactent un agent ? Combien finalisent une transaction ?</label><textarea name="Q02_entonnoir" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q24</span>À quelle étape perd-on le plus de prospects — inscription, recherche, prise de contact, finalisation ?</label><textarea name="Q02_etape_perte" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q25</span>Quels sont les freins les plus fréquemment cités par les prospects qui n'ont pas finalisé ?</label><textarea name="Q02_freins" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Sources de croissance</div>
+      <div class="q-block"><label><span class="q-num">Q26</span>D'où viennent les clients actuels : bouche-à-oreille, réseaux sociaux, Google, partenaires, terrain ?</label><textarea name="Q02_sources_clients" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q27</span>Quel canal d'acquisition génère le meilleur ratio coût/qualité de leads aujourd'hui ?</label><textarea name="Q02_meilleur_canal" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q28</span>Quelles opportunités de croissance ont été identifiées mais jamais exploitées faute de temps ou de ressources ?</label><textarea name="Q02_opportunites_inexploitees" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(1)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(3)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 03 ── -->
+  <div class="section-card" id="sec-3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title-block">
+        <h3>Marché, positionnement et concurrence</h3>
+        <p>Où Immo+ gagne-t-elle, où perd-elle, et quelle est la fenêtre d'opportunité ?</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Perception du marché</div>
+      <div class="q-block"><label><span class="q-num">Q29</span>Comment les agents immobiliers perçoivent-ils Immo+ aujourd'hui : outil utile, gadget ou menace ?</label><textarea name="Q03_perception_agents" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q30</span>Comment les acheteurs/locataires potentiels voient-ils Immo+ par rapport aux alternatives (petites annonces, marché informel, agences) ?</label><textarea name="Q03_perception_clients" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q31</span>Quel est le niveau de notoriété spontanée d'Immo+ auprès des professionnels de l'immobilier en Côte d'Ivoire ?</label><textarea name="Q03_notoriete" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Analyse concurrentielle</div>
+      <div class="q-block"><label><span class="q-num">Q32</span>Quels sont les concurrents directs qui gagnent des parts de marché en ce moment et pourquoi ?</label><textarea name="Q03_concurrents" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q33</span>Dans quels domaines Immo+ est-elle objectivement supérieure à la concurrence (fonctionnalités, prix, expérience, réseau) ?</label><textarea name="Q03_superiorite" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q34</span>Quels segments de marché ou zones géographiques sont encore non couverts par la concurrence ?</label><textarea name="Q03_zones_libres" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q35</span>Y a-t-il un risque d'entrée d'un acteur régional ou international à court terme sur le marché ivoirien ?</label><textarea name="Q03_risque_entree" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Positionnement et différenciation</div>
+      <div class="q-block"><label><span class="q-num">Q36</span>Quel est le message central qu'Immo+ communique aujourd'hui — est-il cohérent et distinctif ?</label><textarea name="Q03_message" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q37</span>Quelle est la proposition de valeur réelle pour un agent qui choisit Immo+ plutôt que de gérer ses leads lui-même ?</label><textarea name="Q03_valeur_agent" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q38</span>Quelle est la proposition de valeur pour un acheteur ou locataire — pourquoi passer par Immo+ ?</label><textarea name="Q03_valeur_client" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q39</span>Y a-t-il un angle de positionnement fort non encore exploité (data, confiance, rapidité, couverture géographique) ?</label><textarea name="Q03_angle_inexploite" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(2)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(4)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 04 ── -->
+  <div class="section-card" id="sec-4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title-block">
+        <h3>Stratégie d'acquisition et canaux marketing</h3>
+        <p>Quels canaux activer en priorité et avec quel budget ?</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Canaux digitaux</div>
+      <div class="q-block"><label><span class="q-num">Q40</span>Quel est l'état de la présence digitale : site web (trafic, SEO), réseaux sociaux (portée, engagement) ?</label><textarea name="Q04_presence_digitale" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q41</span>Des campagnes payantes ont-elles été lancées (Meta Ads, Google Ads) ? Quels résultats avec quels budgets ?</label><textarea name="Q04_campagnes_payantes" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q42</span>Y a-t-il une stratégie de contenu en place (blog, vidéos, témoignages clients) ? Quel impact mesurable ?</label><textarea name="Q04_contenu" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q43</span>Quel est le coût d'acquisition client actuel par canal digital ?</label><textarea name="Q04_cac" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Canaux terrain et partenariaux</div>
+      <div class="q-block"><label><span class="q-num">Q44</span>Quelle est la proportion de clients acquis via le terrain vs le digital ?</label><textarea name="Q04_terrain_vs_digital" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q45</span>Y a-t-il un programme de parrainage ou de referral en place ? Quel est son taux d'activation ?</label><textarea name="Q04_parrainage" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q46</span>Les agents partenaires actuels jouent-ils un rôle actif dans la recommandation d'Immo+ à leurs clients ?</label><textarea name="Q04_role_partenaires" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Budget marketing</div>
+      <div class="q-block"><label><span class="q-num">Q47</span>Quel est le budget marketing total disponible pour les 6 prochains mois ?</label><textarea name="Q04_budget_total" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q48</span>Quelle proportion est allouée au digital vs au terrain vs aux partenariats ?</label><textarea name="Q04_repartition_budget" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q49</span>Quelles campagnes passées ont généré le meilleur retour sur investissement — et lesquelles ont échoué ?</label><textarea name="Q04_roi_campagnes" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(3)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(5)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 05 ── -->
+  <div class="section-card" id="sec-5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title-block">
+        <h3>Partenariats stratégiques et Business Development</h3>
+        <p>Cartographie de l'écosystème partenaires et identification des opportunités BD.</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Portefeuille partenaires actuel</div>
+      <div class="q-block"><label><span class="q-num">Q50</span>Quelle est la liste complète des agences immobilières et agents partenaires actifs aujourd'hui ?</label><textarea name="Q05_liste_partenaires" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q51</span>Quelles sont les conditions actuelles des partenariats : commission, exclusivité, durée, renouvellement ?</label><textarea name="Q05_conditions_partenariats" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q52</span>Quel est le taux d'activation réel des partenaires : parmi ceux qui ont signé, combien publient activement des listings ?</label><textarea name="Q05_taux_activation" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q53</span>Quels partenaires génèrent 80% du volume de listings et de transactions — qui sont les locomotives ?</label><textarea name="Q05_locomotives" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Opportunités non encore activées</div>
+      <div class="q-block"><label><span class="q-num">Q54</span>Y a-t-il des promoteurs immobiliers ou des bailleurs institutionnels non encore approchés ?</label><textarea name="Q05_promoteurs" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q55</span>Des partenariats avec des notaires, des banques ou des organismes de financement ont-ils été explorés ?</label><textarea name="Q05_banques_notaires" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q56</span>Y a-t-il des entreprises ou des ambassades intéressées par des solutions logement pour leurs employés ?</label><textarea name="Q05_entreprises" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q57</span>Quels partenariats ont été tentés et ont échoué ? Pour quelle raison ?</label><textarea name="Q05_echecs" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Modèle de partenariat</div>
+      <div class="q-block"><label><span class="q-num">Q58</span>Quel est le processus d'onboarding actuel d'un nouveau partenaire : durée, étapes, support fourni ?</label><textarea name="Q05_onboarding" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q59</span>Y a-t-il des partenariats exclusifs qui bloquent l'acquisition de nouveaux agents dans certaines zones ?</label><textarea name="Q05_exclusivite" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q60</span>Quel est le modèle de rémunération qui motive le plus les partenaires à être actifs et à recommander Immo+ ?</label><textarea name="Q05_remuneration" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(4)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(6)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 06 ── -->
+  <div class="section-card" id="sec-6">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title-block">
+        <h3>Maillage territorial et zones blanches</h3>
+        <p>Cartographie digitale de la couverture et identification des zones à conquérir.</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Couverture géographique actuelle</div>
+      <div class="q-block"><label><span class="q-num">Q61</span>Dans quelles communes, quartiers et corridors immobiliers Immo+ est-elle active aujourd'hui ?</label><textarea name="Q06_couverture_actuelle" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q62</span>Quelle est la densité de listings par zone géographique — où sont les concentrations et où sont les déserts ?</label><textarea name="Q06_densite" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q63</span>Y a-t-il une carte ou une visualisation du maillage de distribution actuel ? Sous quelle forme ?</label><textarea name="Q06_carte_existante" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q64</span>Quel pourcentage du marché immobilier ivoirien total est couvert par Immo+ aujourd'hui ?</label><textarea name="Q06_part_marche" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Identification des zones blanches</div>
+      <div class="q-block"><label><span class="q-num">Q65</span>Quelles zones géographiques à fort potentiel immobilier n'ont aucun agent ou partenaire Immo+ actif ?</label><textarea name="Q06_zones_blanches" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q66</span>Y a-t-il des corridors immobiliers émergents (nouvelles zones résidentielles, zones de bureau en développement) non encore couverts ?</label><textarea name="Q06_corridors_emergents" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q67</span>Quelles zones sont occupées exclusivement par des concurrents ou par le marché informel ?</label><textarea name="Q06_zones_concurrents" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Stratégie de maillage</div>
+      <div class="q-block"><label><span class="q-num">Q68</span>Quelle est la priorité de conquête géographique selon le potentiel de transactions et la facilité d'activation ?</label><textarea name="Q06_priorite_conquete" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q69</span>Y a-t-il des barrières à l'entrée dans certaines zones : concurrence forte, agents fidélisés, accès difficile ?</label><textarea name="Q06_barrieres" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q70</span>Quels outils ou données sont disponibles pour alimenter la cartographie et le suivi du maillage dans le temps ?</label><textarea name="Q06_outils_carto" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(5)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(7)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 07 ── -->
+  <div class="section-card" id="sec-7">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title-block">
+        <h3>Profil client idéal et segmentation</h3>
+        <p>Qui sont les clients les plus valeureux d'Immo+ et pourquoi choisissent-ils la plateforme ?</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Qui sont les meilleurs clients ?</div>
+      <div class="q-block"><label><span class="q-num">Q71</span>Quel est le profil démographique des acheteurs et locataires les plus actifs : âge, revenus, localisation, situation professionnelle ?</label><textarea name="Q07_profil_demo" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q72</span>Quels types de biens génèrent le plus de transactions finalisées : vente, location, résidentiel, commercial, standing, économique ?</label><textarea name="Q07_types_biens" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q73</span>Dans quelles tranches de prix se situent la majorité des transactions abouties ?</label><textarea name="Q07_tranches_prix" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q74</span>Y a-t-il des segments qui génèrent beaucoup d'activité mais peu de revenus — ou l'inverse ?</label><textarea name="Q07_segments" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Pourquoi choisissent-ils Immo+ ?</div>
+      <div class="q-block"><label><span class="q-num">Q75</span>Quelle est la raison principale invoquée par les clients satisfaits pour avoir choisi Immo+ ?</label><textarea name="Q07_raison_choix" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q76</span>Qu'est-ce qu'Immo+ leur apporte que les alternatives ne leur offraient pas ?</label><textarea name="Q07_valeur_ajoutee" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q77</span>Quel est le niveau de satisfaction client mesuré ou estimé (NPS, retours directs, avis en ligne) ?</label><textarea name="Q07_satisfaction" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Rétention et valeur à long terme</div>
+      <div class="q-block"><label><span class="q-num">Q78</span>Quel est le taux de retour : combien de clients reviennent sur la plateforme pour une deuxième transaction ?</label><textarea name="Q07_taux_retour" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q79</span>Qu'est-ce qui crée de la rétention — et qu'est-ce qui provoque le départ vers un concurrent ou le marché informel ?</label><textarea name="Q07_retention_churn" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q80</span>Y a-t-il des clients ambassadeurs qui recommandent activement Immo+ dans leur entourage ?</label><textarea name="Q07_ambassadeurs" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(6)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(8)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 08 ── -->
+  <div class="section-card" id="sec-8">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div class="section-title-block">
+        <h3>Modèle économique et contraintes budgétaires</h3>
+        <p>Les contraintes financières réelles dans lesquelles s'inscrit la stratégie.</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Modèle de revenus et tarification</div>
+      <div class="q-block"><label><span class="q-num">Q81</span>Quel est le modèle de revenus actuel : commission sur transaction, abonnement agent, frais de listing, ou combinaison ?</label><textarea name="Q08_modele_revenus" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q82</span>Comment la tarification est-elle perçue par les agents partenaires : juste, trop élevée, ou pas assez incitative ?</label><textarea name="Q08_perception_tarif" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q83</span>Y a-t-il une opportunité de revoir la structure tarifaire pour augmenter le volume de partenaires actifs ?</label><textarea name="Q08_revision_tarif" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q84</span>Quel est le revenu moyen par transaction et par agent actif sur les 3 derniers mois ?</label><textarea name="Q08_revenu_moyen" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Ressources disponibles pour la stratégie</div>
+      <div class="q-block"><label><span class="q-num">Q85</span>Quel est le budget total disponible pour les initiatives de Business Development et de marketing sur 6 mois ?</label><textarea name="Q08_budget_bd" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q86</span>Y a-t-il des ressources humaines mobilisables pour exécuter les actions terrain ?</label><textarea name="Q08_ressources_humaines" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q87</span>Quelle est la trésorerie disponible et le runway actuel — combien de temps avant de devoir montrer des résultats financiers ?</label><textarea name="Q08_tresorerie_runway" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q88</span>Y a-t-il des contraintes budgétaires spécifiques sur certains types de dépenses (digital, événements, recrutement) ?</label><textarea name="Q08_contraintes_budgetaires" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Rentabilité et point mort</div>
+      <div class="q-block"><label><span class="q-num">Q89</span>À partir de quel volume de transactions Immo+ atteint-elle son point mort ?</label><textarea name="Q08_point_mort" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q90</span>Existe-t-il un modèle financier avec des projections sur 12 à 24 mois utilisable pour calibrer les objectifs ?</label><textarea name="Q08_modele_financier" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(7)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(9)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 09 ── -->
+  <div class="section-card" id="sec-9">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <div class="section-title-block">
+        <h3>Dossier investisseur et financement</h3>
+        <p>État du dossier investisseur et narrative stratégique pour la levée de fonds.</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">État du dossier actuel</div>
+      <div class="q-block"><label><span class="q-num">Q91</span>Y a-t-il un pitch deck investisseur existant ? Quand a-t-il été préparé et à qui a-t-il été présenté ?</label><textarea name="Q09_pitch_deck" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q92</span>Des investisseurs ont-ils déjà été approchés ? Quelles ont été leurs réactions et les objections principales ?</label><textarea name="Q09_investisseurs_approches" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q93</span>Quelle est la valorisation actuelle d'Immo+ et sur quelle base a-t-elle été estimée ?</label><textarea name="Q09_valorisation" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q94</span>Y a-t-il des investisseurs déjà au capital ? À quelles conditions ont-ils investi ?</label><textarea name="Q09_capital_existant" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Opportunités de financement</div>
+      <div class="q-block"><label><span class="q-num">Q95</span>Immo+ a-t-elle candidaté à des programmes d'accélération (YC, Orange Ventures, Partech Africa) ?</label><textarea name="Q09_accelerateurs" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q96</span>Y a-t-il des subventions ou financements non dilutifs disponibles dans le secteur tech/immobilier en Côte d'Ivoire ?</label><textarea name="Q09_subventions" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Narrative investisseur</div>
+      <div class="q-block"><label><span class="q-num">Q97</span>Quel est l'argument le plus fort pour convaincre un investisseur que le marché immobilier ivoirien est une opportunité de Série A ?</label><textarea name="Q09_argument_principal" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q98</span>Quels KPIs Immo+ doit-elle atteindre dans les 12 prochains mois pour être crédible auprès d'investisseurs régionaux ?</label><textarea name="Q09_kpis_investisseurs" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q99</span>Quelle est ta vision sur le montant à lever, la dilution acceptable et le profil d'investisseur recherché ?</label><textarea name="Q09_vision_levee" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(8)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(10)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 10 ── -->
+  <div class="section-card" id="sec-10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title-block">
+        <h3>Produit et expérience utilisateur</h3>
+        <p>Frictions qui limitent la conversion et contraintes produit pour la stratégie.</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Expérience utilisateur et frictions</div>
+      <div class="q-block"><label><span class="q-num">Q100</span>Quelles sont les étapes du parcours utilisateur qui génèrent le plus d'abandons ?</label><textarea name="Q10_abandons" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q101</span>Y a-t-il des fonctionnalités demandées par les agents ou clients qui font défaut et freinent l'adoption ?</label><textarea name="Q10_fonctionnalites_manquantes" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q102</span>La qualité des listings publiés est-elle satisfaisante : photos, descriptions, exhaustivité des informations ?</label><textarea name="Q10_qualite_listings" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q103</span>Comment les acheteurs et locataires trouvent-ils et contactent-ils les agents — le processus est-il fluide ?</label><textarea name="Q10_parcours_contact" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Contraintes produit pour la stratégie</div>
+      <div class="q-block"><label><span class="q-num">Q104</span>Y a-t-il des limitations techniques actuelles qui contraignent la stratégie d'acquisition ou de partenariats ?</label><textarea name="Q10_limitations_tech" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q105</span>La plateforme peut-elle supporter une multiplication rapide du nombre d'utilisateurs et de listings ?</label><textarea name="Q10_scalabilite" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q106</span>Y a-t-il des fonctionnalités en développement qui vont changer la proposition de valeur dans les 6 prochains mois ?</label><textarea name="Q10_roadmap" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q107</span>Quel est le feedback terrain le plus récurrent des agents partenaires sur la plateforme ?</label><textarea name="Q10_feedback_agents" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(9)">← Précédent</button>
+      <button type="button" class="btn btn-next" onclick="goTo(11)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 11 ── -->
+  <div class="section-card" id="sec-11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div class="section-title-block">
+        <h3>Vision stratégique et alignement</h3>
+        <p>Dernière section — la vision à 3 ans et l'alignement pour que la collaboration réussisse.</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="sub-label">Vision à 3 ans</div>
+      <div class="q-block"><label><span class="q-num">Q108</span>Où tu vois Immo+ dans 3 ans — en termes de parts de marché, de chiffre d'affaires et de positionnement régional ?</label><textarea name="Q11_vision_3ans" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q109</span>Quelle est l'ambition géographique : Côte d'Ivoire uniquement ou expansion sous-régionale à quel horizon ?</label><textarea name="Q11_ambition_geo" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q110</span>Quelle est la sortie envisagée à terme : acteur régional autonome, acquisition, ou introduction en bourse ?</label><textarea name="Q11_sortie" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Priorités et attentes pour les 90 premiers jours</div>
+      <div class="q-block"><label><span class="q-num">Q111</span>Quels sont les 3 résultats concrets que tu attends d'Amenan dans les 30 premiers jours ?</label><textarea name="Q11_attentes_30j" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q112</span>Qu'est-ce qu'une collaboration réussie ressemble à tes yeux à 6 mois et à 12 mois ?</label><textarea name="Q11_succes_6_12mois" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q113</span>Qu'est-ce qui a déjà été essayé et abandonné — et que faut-il absolument éviter de répéter ?</label><textarea name="Q11_eviter" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q114</span>Y a-t-il des sujets sensibles ou des lignes rouges à connaître avant de formuler les premières recommandations ?</label><textarea name="Q11_sensible" placeholder="Ta réponse…"></textarea></div>
+      <div class="sub-label">Tolérance au changement</div>
+      <div class="q-block"><label><span class="q-num">Q115</span>Dans quelle mesure es-tu prêt à adapter les pratiques actuelles d'Immo+ sur la base des recommandations stratégiques ?</label><textarea name="Q11_tolerance_changement" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q116</span>Comment réagis-tu face à des recommandations qui remettent en question des décisions déjà prises ?</label><textarea name="Q11_reaction_remise_en_question" placeholder="Ta réponse…"></textarea></div>
+      <div class="q-block"><label><span class="q-num">Q117</span>Quel est ton niveau d'implication souhaité dans le suivi de la stratégie : weekly check-in, reporting mensuel, ou autonomie totale ?</label><textarea name="Q11_implication" placeholder="Ta réponse…"></textarea></div>
+    </div>
+    <div class="nav-bar">
+      <button type="button" class="btn btn-prev" onclick="goTo(10)">← Précédent</button>
+      <button type="button" class="btn btn-submit" onclick="submitForm()">Envoyer l'audit ✓</button>
+    </div>
+  </div>
+
+  <!-- CONFIRMATION -->
+  <div id="confirmation">
+    <div class="check">✓</div>
+    <h2>Merci Moïse !</h2>
+    <p>Tes réponses ont bien été envoyées. Je les analyse et je te reviens rapidement avec les premières orientations stratégiques pour Immo+.</p>
+    <p style="margin-top:16px; font-size:13px; color:#aaa;">— Amenan C. Sidiki, Analytika Consulting</p>
+  </div>
+
+</div><!-- /container -->
+</form>
+
+<script>
+  const TOTAL = 11;
+  var current = 1;
+
+  function goTo(n) {
+    document.getElementById('sec-' + current).classList.remove('active');
+    current = n;
+    document.getElementById('sec-' + current).classList.add('active');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress() {
+    var pct = Math.round((current / TOTAL) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Section ' + current + ' sur ' + TOTAL;
+    document.getElementById('prog-pct').textContent = pct + '%';
+  }
+
+  function submitForm() {
+    var form = document.getElementById('auditForm');
+    // Hide all sections, show confirmation
+    for (var i = 1; i <= TOTAL; i++) {
+      var s = document.getElementById('sec-' + i);
+      if (s) s.classList.remove('active');
+    }
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('prog-fill').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Formulaire complété';
+    document.getElementById('prog-pct').textContent = '100%';
+    // Submit the form for real
+    form.submit();
+  }
+</script>
+</body>
+</html>

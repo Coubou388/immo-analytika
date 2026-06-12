@@ -279,13 +279,9 @@
 </div>
 
 <!-- FORM -->
-<form id="auditForm" action="https://formsubmit.co/COUBOUDIABAGATE@gmail.com" method="POST">
+<form id="auditForm" action="#" id="auditForm">
 
-  <!-- formsubmit config -->
-  <input type="hidden" name="_subject" value="Audit Opérationnel Immo+ — Réponses de Moïse">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_next" value="">
+
 
 <div class="container">
 
@@ -672,9 +668,10 @@
     document.getElementById('prog-pct').textContent = pct + '%';
   }
 
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxmUydPtFV1cFj_ESRga5vX7TBZWX8S-pctcseEMIhjJxIOO2QIx3be0fI7AOvggLzP/exec';
+
   function submitForm() {
-    var form = document.getElementById('auditForm');
-    // Hide all sections, show confirmation
+    // Show confirmation immediately
     for (var i = 1; i <= TOTAL; i++) {
       var s = document.getElementById('sec-' + i);
       if (s) s.classList.remove('active');
@@ -683,8 +680,19 @@
     document.getElementById('prog-fill').style.width = '100%';
     document.getElementById('prog-label').textContent = 'Formulaire complété';
     document.getElementById('prog-pct').textContent = '100%';
-    // Submit the form for real
-    form.submit();
+
+    // Collect all form data
+    var form = document.getElementById('auditForm');
+    var data = new FormData(form);
+    var params = new URLSearchParams();
+    data.forEach(function(value, key) { params.append(key, value); });
+
+    // Send to Google Sheets (no-cors = fire and forget)
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: params
+    }).catch(function(e) { console.log('Envoi:', e); });
   }
 </script>
 </body>
